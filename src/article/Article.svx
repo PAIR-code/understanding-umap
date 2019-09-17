@@ -1,0 +1,69 @@
+---
+title: UMAP - from theory to practice
+layout: ./Layout.svelte
+---
+
+```js exec
+import Figure from "./Figure.svelte";
+import CechVisualization from "../figures/cech_visualization/components/Figure.svelte";
+import MammothVisualization from "../figures/mammoth_visualization/components/Figure.svelte";
+import ToyVisualization from "../figures/toy_visualization/components/Figure.svelte";
+```
+
+# { \_metadata.title }
+
+Dimensionality reduction is a key tool in the toolbox of data scientists and machine learning practitioners. Most commonly used for visualization, dimensionality reduction offers a crucial window into assessing and understanding large high-dimensional datasets.
+
+UMAP (Universal Manifold Approximation and Projection) is a new technique by McInnes et. al that offers a number of advantages over other widely used algorithms such as t-SNE. First of all, UMAP is fast, scaling well in terms of both dataset size and dimensionality. UMAP is also better than t-SNE at preserving global structure of the data. Finally, UMAP is built on strong theoretical foundations that lead to more advanced functionality and more understandable hyperparameters.
+
+<Figure>
+  <ToyVisualization />
+</Figure>
+
+## UMAP Theory
+
+Most dimensionality reduction algorithms fit into either one of two broad categories: Matrix factorization (such as PCA) or Graph layout (such as t-SNE). At its core, UMAP can be thought of as a graph layout algorithm, very similar to t-SNE, but with a number of key theoretical underpinnings that give the algorithm a more solid footing.
+
+In its most simple sense, the UMAP algorithm consists of two steps: construction of a graph in high dimensions followed by an optimization step to find the most similar graph in lower dimensions. In order to achieve this goal, the algorithm relies on a number of insights from algebraic topology and Riemannian geometry. Despite the intimidating mathematics, the intuitions behind the core principles are actually quite simple. What we want to build in the first half of the algorithm is essentially a weighted graph, with edge strength representing how “close” a given point is to another. The advanced mathematics gives UMAP a solid footing with which to handle the challenges of doing this in high dimensions with real data.
+
+In order to construct the initial high-dimensional graph, UMAP relies on constructing what’s known as a **Čech complex**, which is a way of representing a topology combinatorially (using sets rather than continuous geometry). In order to get there, we’ll use a basic building block called a **simplex**. Geometrically, a simplex is a k-dimensional object formed by connecting k + 1 points - for example, a 0-simplex is a point, a 1-simplex is a line, and a 2-simplex is a triangle. By thinking of our data as a set of simplices, we can capture a representation of the topology, and by combining those simplices in a specific way to form a Čech complex, we get some theoretical guarantees about how well it represents the topology.
+
+We begin by considering each point in our data as a sample from a continuous, high-dimensional shape (our topology). We can think of each point as a 0-simplex. By extending out from each point some radius r, and connecting points that overlap, we can construct sets of 1-, 2-, and higher-dimensional simplices. This simplicial complex does a reasonable job of approximating the fundamental topology of the dataset, and by considering just the 0- and 1-simplices, we’ve effectively just constructed a graph, which can be readily projected into a lower-dimensional analogue.
+
+Unfortunately, real-world high-dimensional data presents a problem that UMAP needs to overcome - picking the right sized radius. Too small a radius and we’ll tend towards isolated, local clusters of points. Too large, and everything becomes connected. This problem is exacerbated by the **curse of dimensionality**, where distances between points become increasingly similar in higher dimensions. UMAP solves this problem in a clever way: Rather than using a fixed radius, UMAP uses a variable radius determined for each point based on the distance to its kth nearest neighbor. Within this local radius, connectedness is then made “fuzzy” by making each connection a probability, with further points less likely to be connected. Since we don’t want any points to be completely isolated, a constraint is added that all points must be connected to at least its closest neighboring point. The final output of this process is a weighted graph, with edge weights representing the likelihood that two points are “connected” in our high-dimensional manifold.
+
+The following interactive example demonstrates a rough version of how UMAP constructs the simplicial complex from a toy dataset.
+
+<Figure>
+  <CechVisualization />
+</Figure>
+
+Note that since each point’s local notion of distance may be different than its neighbors’, we must resolve whether two points are connected based on potentially different directed edge weights. UMAP squares this inconsistency by computing the probability that at least one of the edges exist.
+
+Once the final, fuzzy simplicial complex is constructed, UMAP projects the data into lower dimensions essentially via a force-directed graph layout algorithm. This optimization step is actually very similar to t-SNE, but by jumping through the theoretical hoops while constructing our initial simplicial complex, UMAP is able to accelerate the optimization and preserve much more global structure than t-SNE.
+
+## UMAP Hyperparameters
+
+UMAP offers a number of hyperparameters that are much more understandable than the `perplexity` hyperparameter in t-SNE. We’ll consider two of the more commonly used hyperparameters below.
+
+The most basic hyperparameter is `n_neighbors` - the number of approximate nearest neighbors used to construct the initial high-dimensional graph. It effectively controls how UMAP balances local versus global structure - low values will push UMAP to focus more on local structure by constraining the number of neighboring points considered when analyzing the high-dimensional manifold, while high values will push UMAP towards representing the big-picture structure while losing fine detail.
+
+The second hyperparameter we’ll investigate is `min_dist`, or the minimum distance apart that points are allowed to be in low-dimensional space. This parameter controls how tightly UMAP clumps points together, with low values leading to more clumped embeddings.
+
+The following visualization - extended from excellent work by Max Noichl - is an exploration of the impact of UMAP hyperparameters on a 2D projection of 3D data. By changing the `n_neighbors` and `min_dist` hyperparameters, you can explore their impact on the resulting dimensionality reduction.
+
+<Figure>
+  <MammothVisualization />
+</Figure>
+
+## UMAP vs t-SNE
+
+UMAP provides a number of advantages over t-SNE, including increased speed and performance that scales much better with dataset size and dimensionality. However, the most oft-cited difference between the two algorithms is the balance between local and global structure - UMAP is much better at preserving global structure in the final projection. This means that the inter-cluster relations are potentially more meaningful than in t-SNE, although any given axis or distance in lower dimensions still isn’t interpretable in the way of PCA.
+
+<Figure>
+  <h1>INSERT FIGURE HERE</h1>
+</Figure>
+
+## Conclusion
+
+...
