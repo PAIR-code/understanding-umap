@@ -24,8 +24,10 @@
     "autobuild": "rollup -c -w",
     "dev": "run-p start:dev autobuild",
     "dev:cech": "FIGURE=cech run-p dev",
-    "dev:mammoth": "FIGURE=mammoth run-p dev",
+    "dev:mammoth-umap": "FIGURE=mammoth-umap run-p dev",
+    "dev:mammoth-tsne": "FIGURE=mammoth-tsne run-p dev",
     "dev:toy": "FIGURE=toy run-p dev",
+    "preprocess": "node src/scripts/compress_mammoth.js",
     "start": "sirv public --single",
     "start:dev": "sirv public --single --dev"
   }

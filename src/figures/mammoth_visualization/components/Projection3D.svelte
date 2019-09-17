@@ -1,37 +1,24 @@
 <script>
   import { onMount } from "svelte";
-  import { loadData } from "../js/data";
+  import { loadData } from "../js/load-data";
   import { COLORS } from "../js/colors";
 
   let container;
-  export let labelOffsets;
-  export let mammoth3D;
+  export let colorIndices;
+  export let mammoth3d;
 
   onMount(async () => {
-    const colorIndices = labelOffsets;
-
     const dataset = {
       dimensions: 3,
-      points: mammoth3D,
+      points: mammoth3d,
       metadata: []
     };
 
     const styles = { fog: { enabled: false } };
     const scatterGL = new ScatterGL(container, { styles });
 
-    const colorArray = [];
-    let colorIndex = -1;
-    let nColorPoints = 0;
-    for (let i = 0; i < mammoth3D.length; i++) {
-      if (i >= nColorPoints) {
-        colorIndex += 1;
-        nColorPoints += labelOffsets[colorIndex];
-      }
-      colorArray.push(colorIndex);
-    }
-
     scatterGL.setPointColorer(i => {
-      const colorIndex = colorArray[i];
+      const colorIndex = colorIndices[i];
       return COLORS[colorIndex];
     });
     scatterGL.render(dataset);

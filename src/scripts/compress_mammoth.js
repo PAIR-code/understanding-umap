@@ -1,9 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 
+const PUBLIC_DIR = "../../public/";
+
 const { encode, toString } = require("../shared/js/parse-binary");
-const mammothData = require("../raw_data/mammoth_10k.json");
-const mammothTSNE = require("../raw_data/mammoth_tsne.json");
+const mammothData = require("../../raw_data/mammoth_umap.json");
+const mammothTSNE = require("../../raw_data/mammoth_tsne.json");
 const mammoth3d = mammothData["3d"];
 
 const labels = mammothData.labels;
@@ -19,7 +21,8 @@ labelIndices.forEach(({ label }) => {
   labelCounts[label] += 1;
 });
 
-const encodedProjections = {};
+// Process and encode the UMAP projections
+const encodedUMAP = {};
 Object.keys(mammothData.projections).forEach(key => {
   const projection = mammothData.projections[key];
 
@@ -30,7 +33,7 @@ Object.keys(mammothData.projections).forEach(key => {
   });
 
   const encoded = encode(output, 10);
-  encodedProjections[key] = toString(encoded);
+  encodedUMAP[key] = toString(encoded);
 });
 
 // Sort the 3D points as well
@@ -40,13 +43,20 @@ labelIndices.forEach(({ index }) => {
   mammoth3DSorted.push([point[1], point[2], point[0]]);
 });
 
-// Sort the tsne points as well
-const mammothTSNESorted = [];
-labelIndices.forEach(({ index }) => {
-  const point = mammothTSNE[index];
-  mammothTSNESorted.push(point[0], point[1]);
+// Process and encode the umap projections as well
+const encodedTSNE = {};
+Object.keys(mammothTSNE.projections).forEach(key => {
+  const projection = mammothTSNE.projections[key];
+
+  const output = [];
+  labelIndices.forEach(({ index }) => {
+    const point = projection[index];
+    output.push(point[0], point[1]);
+  });
+
+  const encoded = encode(output, 10);
+  encodedTSNE[key] = toString(encoded);
 });
-const mammothTSNEString = toString(encode(mammothTSNESorted, 10));
 
 const labelOffsets = Object.keys(labelCounts)
   .map(index => {
@@ -55,17 +65,20 @@ const labelOffsets = Object.keys(labelCounts)
   .sort((a, b) => a.index - b.index)
   .map(item => item.count);
 
-const encodedOutput = {
-  projections: encodedProjections,
+const encodedUMAPOutput = {
+  projections: encodedUMAP,
   labelOffsets
 };
-const s = JSON.stringify(encodedOutput);
-fs.writeFileSync(path.join(__dirname, `../public/mammoth_10k_encoded.json`), s);
+const s = JSON.stringify(encodedUMAPOutput);
 fs.writeFileSync(
-  path.join(__dirname, `../public/mammoth_3d.json`),
+  path.join(__dirname, PUBLIC_DIR, "mammoth_10k_encoded.json"),
+  s
+);
+fs.writeFileSync(
+  path.join(__dirname, PUBLIC_DIR, "mammoth_3d.json"),
   JSON.stringify(mammoth3DSorted)
 );
 fs.writeFileSync(
-  path.join(__dirname, `../public/mammoth_tsne_encoded.json`),
-  JSON.stringify({ tsne: mammothTSNEString })
+  path.join(__dirname, PUBLIC_DIR, "mammoth_tsne_encoded.json"),
+  JSON.stringify(encodedTSNE)
 );

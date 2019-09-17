@@ -1,20 +1,20 @@
 <script>
   import { onMount } from "svelte";
-  import { loadData } from "../js/data";
-  import Projection2D from "./Projection2D.svelte";
-  import Projection3D from "./Projection3D.svelte";
+  import { loadData } from "../js/load-data";
+  import Umap2d from "./Umap2d.svelte";
+  import Projection3d from "./Projection3d.svelte";
 
   let isLoaded = false;
-  let labelOffsets;
-  let projections2D;
-  let mammoth3D;
+  let colorIndices;
+  let projections;
+  let mammoth3d;
 
   onMount(async () => {
     const data = await loadData();
     isLoaded = true;
-    labelOffsets = data.labelOffsets;
-    projections2D = data.projections;
-    mammoth3D = data.mammoth3D;
+    colorIndices = data.colorIndices;
+    projections = data.projections;
+    mammoth3d = data.mammoth3d;
   });
 </script>
 
@@ -30,8 +30,8 @@
 
 <div class="container">
   {#if isLoaded}
-    <Projection3D {labelOffsets} {mammoth3D} />
-    <Projection2D {labelOffsets} {projections2D} />
+    <Projection3d {colorIndices} {mammoth3d} />
+    <Umap2d {colorIndices} {projections} />
   {:else}
     <p>loading...</p>
   {/if}

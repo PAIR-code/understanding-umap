@@ -12,8 +12,10 @@ const figure = process.env.FIGURE;
 let input = "src/main.js";
 if (figure === "cech") {
   input = "src/figures/cech_visualization/main.js";
-} else if (figure === "mammoth") {
-  input = "src/figures/mammoth_visualization/main.js";
+} else if (figure === "mammoth-umap") {
+  input = "src/figures/mammoth_visualization/umap.js";
+} else if (figure === "mammoth-tsne") {
+  input = "src/figures/mammoth_visualization/tsne.js";
 } else if (figure === "toy") {
   input = "src/figures/toy_visualization/main.js";
 }

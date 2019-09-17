@@ -7,7 +7,8 @@ yarn
 yarn dev
 
 # To run individual figures standalone
-yarn dev:cech
-yarn dev:mammoth
 yarn dev:toy
+yarn dev:cech
+yarn dev:mammoth-umap
+yarn dev:mammoth-tsne
 ```
