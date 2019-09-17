@@ -6,7 +6,8 @@ layout: ./Layout.svelte
 ```js exec
 import Figure from "./Figure.svelte";
 import CechVisualization from "../figures/cech_visualization/components/Figure.svelte";
-import MammothVisualization from "../figures/mammoth_visualization/components/Figure.svelte";
+import MammothUmapVisualization from "../figures/mammoth_visualization/components/FigureUmap.svelte";
+import MammothTsneVisualization from "../figures/mammoth_visualization/components/FigureTsne.svelte";
 import ToyVisualization from "../figures/toy_visualization/components/Figure.svelte";
 ```
 
@@ -53,7 +54,7 @@ The second hyperparameter we’ll investigate is `min_dist`, or the minimum dist
 The following visualization - extended from excellent work by Max Noichl - is an exploration of the impact of UMAP hyperparameters on a 2D projection of 3D data. By changing the `n_neighbors` and `min_dist` hyperparameters, you can explore their impact on the resulting dimensionality reduction.
 
 <Figure>
-  <MammothVisualization />
+  <MammothUmapVisualization />
 </Figure>
 
 ## UMAP vs t-SNE
@@ -61,7 +62,7 @@ The following visualization - extended from excellent work by Max Noichl - is an
 UMAP provides a number of advantages over t-SNE, including increased speed and performance that scales much better with dataset size and dimensionality. However, the most oft-cited difference between the two algorithms is the balance between local and global structure - UMAP is much better at preserving global structure in the final projection. This means that the inter-cluster relations are potentially more meaningful than in t-SNE, although any given axis or distance in lower dimensions still isn’t interpretable in the way of PCA.
 
 <Figure>
-  <h1>INSERT FIGURE HERE</h1>
+  <MammothTsneVisualization />
 </Figure>
 
 ## Conclusion

@@ -22,7 +22,7 @@ export const demos = [
     options: [
       {
         name: "Points Per Cluster",
-        min: 1,
+        min: 10,
         max: 100,
         start: 50
       },
@@ -39,12 +39,11 @@ export const demos = [
     name: "Three Clusters",
     description:
       "Three clusters with equal numbers of points, but at " +
-      "different distances from each other. Cluster distances are " +
-      "only apparent at certain perplexities",
+      "different distances from each other.",
     options: [
       {
         name: "Points Per Cluster",
-        min: 1,
+        min: 10,
         max: 100,
         start: 50
       },
@@ -61,11 +60,11 @@ export const demos = [
     name: "Two Different-Sized Clusters",
     description:
       "Two clusters with equal numbers of points, but different " +
-      "variances within the clusters. Cluster separation depends on perplexity.",
+      "variances within the clusters.",
     options: [
       {
         name: "Points Per Cluster",
-        min: 1,
+        min: 10,
         max: 100,
         start: 50
       },
@@ -92,7 +91,7 @@ export const demos = [
     options: [
       {
         name: "Points Per Cluster",
-        min: 1,
+        min: 10,
         max: 100,
         start: 50
       }
@@ -101,13 +100,11 @@ export const demos = [
   },
   {
     name: "Cluster In Cluster",
-    description:
-      "A dense, tight cluster inside of a wide, sparse cluster. " +
-      "Perplexity makes a big difference here.",
+    description: "A dense, tight cluster inside of a wide, sparse cluster.",
     options: [
       {
         name: "Points Per Cluster",
-        min: 1,
+        min: 10,
         max: 100,
         start: 50
       },
@@ -128,7 +125,7 @@ export const demos = [
     options: [
       {
         name: "Number Of Points",
-        min: 1,
+        min: 20,
         max: 100,
         start: 50
       }
@@ -143,7 +140,7 @@ export const demos = [
     options: [
       {
         name: "Number Of Points",
-        min: 1,
+        min: 20,
         max: 100,
         start: 50
       }
@@ -159,7 +156,7 @@ export const demos = [
     options: [
       {
         name: "Number Of Points",
-        min: 1,
+        min: 20,
         max: 500,
         start: 50
       },
@@ -180,7 +177,7 @@ export const demos = [
     options: [
       {
         name: "Number Of Points",
-        min: 1,
+        min: 20,
         max: 500,
         start: 50
       },
@@ -201,7 +198,7 @@ export const demos = [
     options: [
       {
         name: "Number Of Points",
-        min: 1,
+        min: 20,
         max: 200,
         start: 50
       }
@@ -216,7 +213,7 @@ export const demos = [
     options: [
       {
         name: "Number Of Points",
-        min: 1,
+        min: 20,
         max: 200,
         start: 50
       }
@@ -229,7 +226,7 @@ export const demos = [
     options: [
       {
         name: "Number Of Points",
-        min: 1,
+        min: 20,
         max: 200,
         start: 50
       }
@@ -244,7 +241,7 @@ export const demos = [
     options: [
       {
         name: "Number Of Points",
-        min: 1,
+        min: 20,
         max: 500,
         start: 50
       }
@@ -257,7 +254,7 @@ export const demos = [
     options: [
       {
         name: "Number Of Points",
-        min: 1,
+        min: 20,
         max: 1000,
         start: 100
       },
@@ -276,7 +273,7 @@ export const demos = [
     options: [
       {
         name: "Number Of Points",
-        min: 1,
+        min: 20,
         max: 1000,
         start: 100
       },
@@ -297,7 +294,7 @@ export const demos = [
     options: [
       {
         name: "Number Of Points",
-        min: 2,
+        min: 20,
         max: 100,
         start: 50
       }
@@ -310,7 +307,7 @@ export const demos = [
     options: [
       {
         name: "Number Of Points",
-        min: 2,
+        min: 20,
         max: 200,
         start: 50
       },

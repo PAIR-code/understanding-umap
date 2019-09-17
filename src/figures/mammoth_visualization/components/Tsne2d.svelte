@@ -20,7 +20,6 @@
   afterUpdate(() => {
     perplexity = perplexities[perplexityIndex];
     projection = getCurrentProjection();
-    console.log(perplexity, projection[0]);
   });
 </script>
 

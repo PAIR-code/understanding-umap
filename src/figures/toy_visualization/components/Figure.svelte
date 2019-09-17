@@ -8,71 +8,72 @@
   import Parameter from "./Parameter.svelte";
 
   let isRunning = false;
+  let isFinished = false;
   let lastSelectedDemoIndex = null;
   let selectedDemoIndex = 0;
+  let points = [];
   let demo = demos[selectedDemoIndex];
   let step = 0;
   let canvas;
   let maxSteps = 200;
 
-  let runningDemo;
+  let nNeighbors = 15;
+  let nNeighborsMin = 3;
+  let nNeighborsMax = 100;
 
-  const umapOptions = [
-    {
-      name: "nNeighbors",
-      min: 3,
-      max: 100,
-      value: 15
-    },
-    {
-      name: "minDist",
-      min: 0,
-      max: 1,
-      value: 0.1,
-      step: 0.01
-    }
-  ];
+  let minDist = 0.1;
+  let minDistMin = 0;
+  let minDistMax = 1;
+
+  let runningDemo;
 
   let handlePreviewClick = index => () => {
     selectedDemoIndex = index;
     demo = demos[selectedDemoIndex];
   };
 
-  const playPause = () => console.log("playpause!");
+  const playPause = () => {
+    if (isRunning && runningDemo) runningDemo.pause();
+    if (!isRunning && runningDemo) runningDemo.unpause();
+    isRunning = !isRunning;
+  };
   const restart = () => {
     if (runningDemo) {
       beginRunDemo();
     }
   };
 
-  const getUMAPOptions = () => {
-    const [nNeighbors, minDist] = umapOptions;
-    return {
-      nNeighbors: nNeighbors.value,
-      minDist: minDist.value
-    };
-  };
-
   const beginRunDemo = () => {
-    const points = getPoints(demo);
-    runningDemo = runDemo(points, canvas, getUMAPOptions(), currentStep => {
+    if (runningDemo) runningDemo.pause();
+    isRunning = true;
+    isFinished = false;
+
+    if (nNeighbors >= points.length) {
+      nNeighbors = points.length - 1;
+    }
+    const umapOptions = { nNeighbors, minDist };
+
+    runningDemo = runDemo(points, canvas, umapOptions, currentStep => {
       step = currentStep;
       if (step >= maxSteps) {
         isRunning = false;
+        isFinished = true;
         runningDemo.pause();
       }
     });
   };
 
   onMount(() => {
-    const points = getPoints(demo);
+    points = getPoints(demo);
     visualize(points, canvas, null, null);
   });
 
   afterUpdate(() => {
+    demo = demos[selectedDemoIndex];
+    points = getPoints(demo);
+
     if (lastSelectedDemoIndex !== selectedDemoIndex) {
       beginRunDemo();
-      isRunning = true;
       lastSelectedDemoIndex = selectedDemoIndex;
     }
   });
@@ -164,6 +165,10 @@
     float: left;
     position: relative;
   }
+  #data-details #play-controls button:disabled {
+    background: lightgray;
+    cursor: default;
+  }
   #play-controls i {
     display: block;
     position: absolute;
@@ -250,7 +255,7 @@
   <div id="data-details">
     <div id="data-controls">
       <div id="play-controls">
-        <button id="play-pause" on:click={playPause}>
+        <button id="play-pause" on:click={playPause} disabled={isFinished}>
           {#if isRunning}
             <i class="material-icons">pause</i>
           {:else}
@@ -272,9 +277,12 @@
         {/each}
       </div>
       <div id="umap-options">
-        {#each umapOptions as umapOption (umapOption.name)}
-          <Parameter options={umapOption} bind:value={umapOption.value} />
-        {/each}
+        <Parameter
+          options={{ name: 'nNeighbors', min: nNeighborsMin, max: nNeighborsMax, step: 1 }}
+          bind:value={nNeighbors} />
+        <Parameter
+          options={{ name: 'minDist', min: minDistMin, max: minDistMax, step: 0.01 }}
+          bind:value={minDist} />
       </div>
     </div>
     <div id="data-description">
