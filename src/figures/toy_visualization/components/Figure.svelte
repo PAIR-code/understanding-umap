@@ -9,7 +9,7 @@
 
   let isRunning = false;
   let isFinished = false;
-  let lastSelectedDemoIndex = null;
+  let lastSelectedDemoIndex = 0;
   let selectedDemoIndex = 0;
   let points = [];
   let demo = demos[selectedDemoIndex];
@@ -33,9 +33,15 @@
   };
 
   const playPause = () => {
-    if (isRunning && runningDemo) runningDemo.pause();
-    if (!isRunning && runningDemo) runningDemo.unpause();
-    isRunning = !isRunning;
+    if (isRunning && runningDemo) {
+      runningDemo.pause();
+      isRunning = !isRunning;
+    } else if (!isRunning && runningDemo) {
+      runningDemo.unpause();
+      isRunning = !isRunning;
+    } else if (!isRunning && !runningDemo) {
+      beginRunDemo();
+    }
   };
   const restart = () => {
     if (runningDemo) {
@@ -90,13 +96,6 @@
     box-sizing: border-box;
   }
 
-  #playground.modal {
-    position: fixed;
-    left: 10px;
-    right: 10px;
-    top: 50px;
-  }
-
   /* Playground Canvas */
   #playground-canvas {
     float: left;
@@ -147,7 +146,7 @@
   }
 
   #data-details #play-controls {
-    margin-bottom: 18px;
+    margin-bottom: 8px;
     overflow: hidden;
     position: relative;
   }
@@ -235,6 +234,12 @@
     position: relative;
     top: 7px;
   }
+
+  .parameters-label {
+    font-style: bold;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
 </style>
 
 <div id="playground">
@@ -262,7 +267,10 @@
             <i class="material-icons">play_arrow</i>
           {/if}
         </button>
-        <button id="restart" on:click={restart}>
+        <button
+          id="restart"
+          on:click={restart}
+          disabled={isRunning || step === 0}>
           <i class="material-icons">refresh</i>
         </button>
         <div id="steps-display">
@@ -272,11 +280,13 @@
         </div>
       </div>
       <div id="data-options">
+        <div class="parameters-label">Dataset Parameters</div>
         {#each demo.options as demoOption (demoOption.name)}
           <Parameter options={demoOption} bind:value={demoOption.start} />
         {/each}
       </div>
       <div id="umap-options">
+        <div class="parameters-label">UMAP Parameters</div>
         <Parameter
           options={{ name: 'nNeighbors', min: nNeighborsMin, max: nNeighborsMax, step: 1 }}
           bind:value={nNeighbors} />

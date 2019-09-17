@@ -1,11 +1,12 @@
 ---
-title: UMAP - from theory to practice
+title: UMAP Explained
 layout: ./Layout.svelte
 ---
 
 ```js exec
 import Figure from "./Figure.svelte";
 import CechVisualization from "../figures/cech_visualization/components/Figure.svelte";
+import FmnistVisualization from "../figures/fmnist_visualization/components/Figure.svelte";
 import MammothUmapVisualization from "../figures/mammoth_visualization/components/FigureUmap.svelte";
 import MammothTsneVisualization from "../figures/mammoth_visualization/components/FigureTsne.svelte";
 import ToyVisualization from "../figures/toy_visualization/components/Figure.svelte";
@@ -19,6 +20,9 @@ UMAP (Universal Manifold Approximation and Projection) is a new technique by McI
 
 <Figure>
   <ToyVisualization />
+  <span slot="caption">
+    Apply UMAP projection to various toy datasets. Note that UMAP's performance is relatively unaffected by the dataset size and dimensionality.
+  </span>
 </Figure>
 
 ## UMAP Theory
@@ -26,6 +30,13 @@ UMAP (Universal Manifold Approximation and Projection) is a new technique by McI
 Most dimensionality reduction algorithms fit into either one of two broad categories: Matrix factorization (such as PCA) or Graph layout (such as t-SNE). At its core, UMAP can be thought of as a graph layout algorithm, very similar to t-SNE, but with a number of key theoretical underpinnings that give the algorithm a more solid footing.
 
 In its most simple sense, the UMAP algorithm consists of two steps: construction of a graph in high dimensions followed by an optimization step to find the most similar graph in lower dimensions. In order to achieve this goal, the algorithm relies on a number of insights from algebraic topology and Riemannian geometry. Despite the intimidating mathematics, the intuitions behind the core principles are actually quite simple. What we want to build in the first half of the algorithm is essentially a weighted graph, with edge strength representing how “close” a given point is to another. The advanced mathematics gives UMAP a solid footing with which to handle the challenges of doing this in high dimensions with real data.
+
+<Figure>
+  <FmnistVisualization />
+  <span slot="caption">
+    UMAP projection applied to the Fashion MNIST dataset. 28x28 images of cloting items in 10 categories are encoded as 784-dimensional vectors and then projected to 3 using UMAP. Notice how well clustered each different category is (local structure), while similar categories tend to colocate together (global structure).
+  </span>
+</Figure>
 
 In order to construct the initial high-dimensional graph, UMAP relies on constructing what’s known as a **Čech complex**, which is a way of representing a topology combinatorially (using sets rather than continuous geometry). In order to get there, we’ll use a basic building block called a **simplex**. Geometrically, a simplex is a k-dimensional object formed by connecting k + 1 points - for example, a 0-simplex is a point, a 1-simplex is a line, and a 2-simplex is a triangle. By thinking of our data as a set of simplices, we can capture a representation of the topology, and by combining those simplices in a specific way to form a Čech complex, we get some theoretical guarantees about how well it represents the topology.
 
@@ -37,6 +48,9 @@ The following interactive example demonstrates a rough version of how UMAP const
 
 <Figure>
   <CechVisualization />
+  <span slot="caption">
+    Adjust the slider to extend a radius outwards from each point, computed by the distance to its nth nearest neighbor. Notice that past the intersection with the first neighbor, the radius begins to get fuzzy, with subsequent connections appearing with less weight;
+  </span>
 </Figure>
 
 Note that since each point’s local notion of distance may be different than its neighbors’, we must resolve whether two points are connected based on potentially different directed edge weights. UMAP squares this inconsistency by computing the probability that at least one of the edges exist.
@@ -55,6 +69,9 @@ The following visualization - extended from excellent work by Max Noichl - is an
 
 <Figure>
   <MammothUmapVisualization />
+  <span slot="caption">
+    UMAP projections of a 3D woolly mammoth skeleton into 2 dimensions, with various settings for the nNeighbors and minDist hyperparameters.
+  </span>
 </Figure>
 
 ## UMAP vs t-SNE
@@ -63,6 +80,9 @@ UMAP provides a number of advantages over t-SNE, including increased speed and p
 
 <Figure>
   <MammothTsneVisualization />
+  <span slot="caption">
+    A comparison between UMAP and t-SNE projections of a 3D woolly mammoth skeleton into 2 dimensions, with various settings for hyperparameters. Notice how much more global structure is preserved with UMAP, particularly with larger values of nNeighbors.
+  </span>
 </Figure>
 
 ## Conclusion

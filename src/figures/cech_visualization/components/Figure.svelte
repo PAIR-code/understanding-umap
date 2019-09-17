@@ -17,10 +17,12 @@
   let canvas;
   let progress = 0;
 
+  let lastNNearest = 3;
+  let nNearest = 3;
+
   const width = 2048;
   const height = 1024;
   const nPoints = 100;
-  const nNearest = 3;
 
   colorScale.domain(
     COLORS.map((_, i) => {
@@ -30,11 +32,11 @@
 
   const random = new Random(42);
   const constrain = (n, max, min = 0) => Math.max(Math.min(n, max), min);
-
-  // construct some data in a specific shape
-  const points = [];
   const getRandom = x => Math.floor(x * random.nextFloat());
-  const getRandomPoint = () => ({ x: getRandom(width), y: getRandom(height) });
+  const getRandomPoint = () => ({
+    x: getRandom(width),
+    y: getRandom(height)
+  });
   const getSinePoint = () => {
     let x = getRandom(width);
     let y = (Math.sin((x / width) * 6 * Math.PI) * height) / 4 + height / 2;
@@ -44,6 +46,9 @@
       y: constrain(y, height - POINT_RADIUS, POINT_RADIUS)
     };
   };
+
+  // construct some data in a specific shape
+  const points = [];
   for (let i = 0; i < nPoints; i++) {
     const getPoint = getSinePoint;
     // const getPoint = getRandomPoint;
@@ -51,50 +56,63 @@
     points.push({ ...point, index: i });
   }
 
-  // Precompute all radius intersections
-  const distanceFn = (a, b) =>
-    Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
-  const tree = new kdTree.kdTree([...points], distanceFn, ["x", "y"]);
-  const nearestEntries = points.map(point => {
-    const entries = tree.nearest(point, nNearest + 1);
-    const sorted = entries.sort((a, b) => a[1] - b[1]).slice(1, nNearest + 1);
-    return sorted.map(entry => {
-      const point = entry[0];
-      const { x, y, index } = point;
-      return { point: { x, y }, index, distance: entry[1] };
+  let nearestEntries;
+  let distances;
+  let maxDistances;
+  let nearestRadii;
+  let colors;
+
+  const compute = () => {
+    const distanceFn = (a, b) =>
+      Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
+    const tree = new kdTree.kdTree([...points], distanceFn, ["x", "y"]);
+    nearestEntries = points.map(point => {
+      const entries = tree.nearest(point, nNearest + 1);
+      const sorted = entries.sort((a, b) => a[1] - b[1]).slice(1, nNearest + 1);
+      return sorted.map(entry => {
+        const point = entry[0];
+        const { x, y, index } = point;
+        return { point: { x, y }, index, distance: entry[1] };
+      });
     });
-  });
-  const distances = nearestEntries.map(e => e.map(f => f.distance));
-  const maxDistances = distances.map(d => d[d.length - 1]);
+    distances = nearestEntries.map(e => e.map(f => f.distance));
+    maxDistances = distances.map(d => d[d.length - 1]);
 
-  const nearestRadii = points.map((point, i) => {
-    const fromPointToFurthest = maxDistances[i];
-    const fromPointToNearest = distances[i][0];
+    nearestRadii = points.map((point, i) => {
+      const fromPointToFurthest = maxDistances[i];
+      const fromPointToNearest = distances[i][0];
 
-    const j = nearestEntries[i][0].index;
-    const fromNearestToItsFurthest = maxDistances[j];
-    const fromNearestToItsNearest = distances[j][0];
+      const j = nearestEntries[i][0].index;
+      const fromNearestToItsFurthest = maxDistances[j];
+      const fromNearestToItsNearest = distances[j][0];
 
-    if (fromPointToNearest > fromNearestToItsNearest) {
-      const k = nearestEntries[j][0].index;
-      const fromNearestNearestToItsFurthest = maxDistances[k];
-      const percentFromNearestToNearest =
-        fromNearestToItsNearest /
-        (fromNearestToItsFurthest + fromNearestNearestToItsFurthest);
-      const nearestRadius =
-        fromNearestToItsFurthest * percentFromNearestToNearest;
-      return fromPointToNearest - nearestRadius;
-    } else {
-      const percentFromPointToNearest =
-        fromPointToNearest / (fromPointToFurthest + fromNearestToItsFurthest);
-      return percentFromPointToNearest * fromPointToFurthest;
-    }
-  });
-  const colors = points.map(point => {
-    return colorScale(point.x);
-  });
+      if (fromPointToNearest > fromNearestToItsNearest) {
+        const k = nearestEntries[j][0].index;
+        const fromNearestNearestToItsFurthest = maxDistances[k];
+        const percentFromNearestToNearest =
+          fromNearestToItsNearest /
+          (fromNearestToItsFurthest + fromNearestNearestToItsFurthest);
+        const nearestRadius =
+          fromNearestToItsFurthest * percentFromNearestToNearest;
+        return fromPointToNearest - nearestRadius;
+      } else {
+        const percentFromPointToNearest =
+          fromPointToNearest / (fromPointToFurthest + fromNearestToItsFurthest);
+        return percentFromPointToNearest * fromPointToFurthest;
+      }
+    });
+    colors = points.map(point => {
+      return colorScale(point.x);
+    });
+  };
+  compute();
 
   afterUpdate(async () => {
+    if (lastNNearest !== nNearest) {
+      compute();
+      lastNNearest = nNearest;
+    }
+
     const ctx = canvas.getContext("2d");
     const percent = progress / 100;
 
@@ -186,6 +204,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-top: 6px;
   }
 
   label {
@@ -199,5 +218,9 @@
   <div class="controls">
     <label>progress: {progress}%</label>
     <Slider min={0} max={100} step={1} bind:value={progress} />
+  </div>
+  <div class="controls">
+    <label>nNearest: {nNearest}</label>
+    <Slider min={2} max={5} step={1} bind:value={nNearest} />
   </div>
 </div>

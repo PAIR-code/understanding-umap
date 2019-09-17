@@ -10,13 +10,20 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    margin-top: 36px;
-    padding: 36px 0 0 0;
+    margin-top: 18px;
+    padding: 18px 0 0 0;
   }
 
   .figure-container {
     max-width: 1000px;
+    width: 100%;
+  }
+
+  caption {
+    margin: 20px 0;
+    font-style: italic;
+    width: 80%;
+    font-size: 12px;
   }
 </style>
 
@@ -24,4 +31,7 @@
   <div class="figure-container">
     <slot />
   </div>
+  <caption>
+    <slot name="caption" />
+  </caption>
 </figure>

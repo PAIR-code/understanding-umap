@@ -3,10 +3,10 @@
   import Slider from "../../../shared/components/Slider.svelte";
   import Projection2d from "./Projection2D.svelte";
 
-  const perplexities = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
+  const perplexities = [5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
   let canvas;
-  let perplexityIndex = 5;
+  let perplexityIndex = 4;
   let perplexity = perplexities[perplexityIndex];
 
   export let colorIndices;
