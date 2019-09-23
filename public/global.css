@@ -27,6 +27,10 @@ a:visited {
   color: rgb(0, 80, 160);
 }
 
+p {
+  font-size: 1.2rem;
+}
+
 label {
   display: block;
 }

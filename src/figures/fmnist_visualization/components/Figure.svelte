@@ -1,37 +1,98 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, forceUpdate } from "svelte";
   import { loadData } from "../js/load-data";
+  import { ScatterGL } from "scatter-gl";
+  import Color from "color";
 
   let container;
   let data;
   let metadata;
   let colorsByLabel;
   let isLoaded = false;
+  let isUmapProjection = true;
+  let selectedLabelIndices = new Set();
   let scatterGL;
 
-  const onCategoryMouseOver = index => () => {
+  let umapDataset;
+  let tsneDataset;
+
+  let isOrbiting = true;
+
+  const onCameraMove = () => {
+    if (isOrbiting) isOrbiting = false;
+  };
+
+  const onPointClick = i => {
+    const labelIndex = i === null ? null : metadata[i].labelIndex;
+    onCategoryClick(labelIndex)();
+  };
+
+  const onCategoryClick = index => e => {
+    e.stopPropagation();
+    if (e.shiftKey) {
+      selectedLabelIndices.add(index);
+    } else {
+      selectedLabelIndices.clear();
+    }
+    if (index !== null) {
+      selectedLabelIndices.add(index);
+    }
+
+    // Necessary to force a rerender of the category labels
+    selectedLabelIndices = selectedLabelIndices;
+
+    if (selectedLabelIndices.size === 0) return setDefaultPointColorer();
     scatterGL.setPointColorer(i => {
       const labelIndex = metadata[i].labelIndex;
-      return labelIndex === index ? colorsByLabel[labelIndex] : "white";
+      return selectedLabelIndices.has(labelIndex)
+        ? colorsByLabel[labelIndex].string()
+        : "white";
     });
   };
 
   const setDefaultPointColorer = () => {
     scatterGL.setPointColorer(i => {
       const labelIndex = metadata[i].labelIndex;
-      return colorsByLabel[labelIndex];
+      return colorsByLabel[labelIndex].string();
     });
+  };
+
+  const getBackgroundColor = (labelIndex, selectedLabelIndices) => {
+    const isSelected = selectedLabelIndices.has(labelIndex);
+    const noneSelected = selectedLabelIndices.size === 0;
+    const color = colorsByLabel[labelIndex];
+    return isSelected || noneSelected
+      ? color.string()
+      : color.lighten(0.3).string();
+  };
+
+  const toggleProjectionType = () => {
+    isUmapProjection = !isUmapProjection;
+    if (isUmapProjection) {
+      scatterGL.updateDataset(umapDataset);
+    } else {
+      scatterGL.updateDataset(tsneDataset);
+    }
+  };
+
+  const toggleOrbit = () => {
+    isOrbiting = true;
+    scatterGL.startOrbitAnimation();
   };
 
   onMount(async () => {
     data = await loadData();
     isLoaded = true;
 
-    const dataPoints = [];
     metadata = [];
-    data.projection.forEach((vector, index) => {
+    const umapPoints = [];
+    const tsnePoints = [];
+
+    data.umapProjection.forEach((vector, index) => {
       const labelIndex = data.labels[index];
-      dataPoints.push([vector[2], vector[0], vector[1]]);
+      umapPoints.push([vector[2], vector[0], vector[1]]);
+      const tsneVector = data.tsneProjection[index];
+      tsnePoints.push(tsneVector);
       metadata.push({
         labelIndex,
         label: data.labelNames[labelIndex]
@@ -40,60 +101,131 @@
 
     const dataset = {
       dimensions: 3,
-      points: dataPoints,
       metadata,
       spriteMetadata: {
-        spriteImage: "fmnist_spritesheet.png",
+        spriteImage: "spritesheet.png",
         singleSpriteSize: [28, 28]
       }
     };
 
+    umapDataset = {
+      ...dataset,
+      points: umapPoints
+    };
+
+    tsneDataset = {
+      ...dataset,
+      points: tsnePoints
+    };
+
     colorsByLabel = [...new Array(10)].map((_, i) => {
-      const hue = Math.floor((360 / 10) * i);
-      return `hsl(${hue}, 100%, 50%)`;
+      let hue = Math.floor((360 / 10) * i);
+      return new Color({ h: hue, s: 100, l: 70 });
     });
 
     scatterGL = new ScatterGL(container, {
       renderMode: "SPRITE",
-      camera: { zoom: 2.0 },
-      selectEnabled: false
+      camera: { zoom: 1.3 },
+      selectEnabled: false,
+      onClick: onPointClick,
+      onCameraMove
     });
     setDefaultPointColorer();
-    scatterGL.render(dataset);
+    scatterGL.render(umapDataset);
   });
 </script>
 
 <style>
-  .scatter-gl-container {
-    width: 80%;
+  .container {
+    position: relative;
+    width: 100%;
     min-height: 500px;
-    float: left;
+  }
+
+  .scatter-gl-container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
   }
 
   .categories {
+    height: 100%;
     width: 20%;
-    min-height: 500px;
-    float: left;
+    position: absolute;
+    right: 0;
   }
 
   .category {
+    cursor: pointer;
     margin-bottom: 10px;
     padding: 10px;
     user-select: none;
     color: #333;
   }
+
+  .category:hover {
+    text-decoration: underline;
+  }
+
+  .projection-type {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: aliceblue;
+    padding: 10px;
+    width: 150px;
+  }
+
+  .projection-type:hover {
+    text-decoration: underline;
+  }
+
+  .projection-type .bold {
+    font-weight: 900;
+  }
+
+  .orbit {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    cursor: pointer;
+  }
+  .orbit:hover {
+    color: #333;
+  }
 </style>
 
-<div class="scatter-gl-container" bind:this={container} />
-<div class="categories">
-  {#if isLoaded}
-    {#each data.labelNames as labelName, labelIndex}
+<div class="container">
+  <div class="scatter-gl-container" bind:this={container} />
+  <div class="projection-type" on:click={toggleProjectionType}>
+    <span class={isUmapProjection ? 'bold' : ''}>UMAP</span>
+    /
+    <span class={!isUmapProjection ? 'bold' : ''}>t-SNE</span>
+  </div>
+  <div class="categories">
+    {#if isLoaded}
       <div
         class="category"
-        style="background-color: {colorsByLabel[labelIndex]}"
-        on:mouseover={onCategoryMouseOver(labelIndex)}>
-        {labelName}
+        style="background-color: aliceblue"
+        on:click={onCategoryClick(null)}>
+        All
       </div>
-    {/each}
+      {#each data.labelNames as labelName, labelIndex}
+        <div
+          class="category"
+          style="background-color: {getBackgroundColor(labelIndex, selectedLabelIndices)}"
+          on:click={onCategoryClick(labelIndex)}>
+          {labelName}
+        </div>
+      {/each}
+    {/if}
+  </div>
+  {#if !isOrbiting}
+    <div class="orbit" on:click={toggleOrbit}>
+      <i class="material-icons">3d_rotation</i>
+    </div>
   {/if}
 </div>

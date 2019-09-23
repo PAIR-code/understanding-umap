@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import * as d3 from "d3";
+import { createCanvas } from "canvas";
+
 // Euclidean distance.
 export function dist(a, b) {
   var d = 0;
@@ -414,4 +417,138 @@ export function randomJump(n, dim) {
     current = next;
   }
   return points;
+}
+
+function multiplyScalar(vector, x) {
+  return vector.map(val => val * x);
+}
+
+function addNoise(vector, x) {
+  return vector.map(val => {
+    const noise = Math.random() * x - x / 2;
+    return val + noise;
+  });
+}
+
+export function star(n, nArms, dim) {
+  const points = [];
+  const pointsPerArm = Math.floor(n / nArms);
+  for (let i = 0; i < nArms; i++) {
+    const armVector = normalVector(dim);
+    for (let i = 0; i < pointsPerArm; i++) {
+      const percent = i / pointsPerArm;
+      const noise = 0.01;
+      const p = addNoise(multiplyScalar(armVector, percent), noise);
+      points.push(new Point(p));
+    }
+  }
+  return points;
+}
+
+function interpolate(a, b, percent) {
+  return a.map((val, i) => {
+    const d = b[i] - val;
+    return d * percent + val;
+  });
+}
+
+export function linkedClusters(nClusters, perCluster, perLink, dim) {
+  const points = [];
+  const centroids = [];
+  for (let i = 0; i < nClusters; i++) {
+    const centroid = normalVector(dim);
+    centroids.push(centroid);
+
+    for (let i = 0; i < perCluster; i++) {
+      const p = addNoise(centroid, 0.2);
+      points.push(p);
+    }
+
+    if (i > 0) {
+      const lastCentroid = centroids[i - 1];
+      for (let i = 0; i < perLink; i++) {
+        const percent = i / perLink;
+        const p = interpolate(centroid, lastCentroid, percent);
+        points.push(addNoise(p, 0.01));
+      }
+    }
+  }
+  return points.map(p => new Point(p));
+}
+
+export function continuousLineImages(nLines, nPixels = 28) {
+  const canvas = createCanvas(nPixels, nPixels);
+  const ctx = canvas.getContext("2d");
+
+  const center = nPixels / 2;
+  const lineDistance = nPixels * 2;
+
+  ctx.fillStyle = "#000";
+  ctx.strokeStyle = "#fff";
+  ctx.lineWidth = 2;
+
+  const output = [];
+  for (let i = 0; i < nLines; i++) {
+    const progress = i / nLines;
+    ctx.fillRect(0, 0, nPixels, nPixels);
+
+    const angle = Math.PI * progress;
+    const dY = Math.sin(angle) * lineDistance;
+    const dX = Math.cos(angle) * lineDistance;
+
+    ctx.beginPath();
+    ctx.moveTo(center - dX, center - dY);
+    ctx.lineTo(center + dX, center + dY);
+    ctx.stroke();
+
+    const { data } = ctx.getImageData(0, 0, nPixels, nPixels);
+    const pixelData = [];
+    for (let j = 0; j < data.length; j += 4) {
+      pixelData.push(data[j]);
+    }
+    output.push(new Point(pixelData, angleColor(angle)));
+  }
+  return output;
+}
+
+export function clusteredLineImages(nLines, nClusters, nPixels = 28) {
+  const canvas = createCanvas(nPixels, nPixels);
+  const ctx = canvas.getContext("2d");
+
+  const center = nPixels / 2;
+  const lineDistance = nPixels * 2;
+
+  ctx.fillStyle = "#000";
+  ctx.strokeStyle = "#fff";
+  ctx.lineWidth = 2;
+
+  const linesPerCluster = Math.floor(nLines / nClusters);
+
+  const output = [];
+  for (let i = 0; i < nClusters; i++) {
+    const progress = i / nClusters;
+
+    for (let j = 0; j < linesPerCluster; j++) {
+      ctx.fillRect(0, 0, nPixels, nPixels);
+
+      const noise = Math.random() * 0.25;
+      const angle = Math.PI * progress + noise;
+
+      const dY = Math.sin(angle) * lineDistance;
+      const dX = Math.cos(angle) * lineDistance;
+
+      ctx.beginPath();
+      ctx.moveTo(center - dX, center - dY);
+      ctx.lineTo(center + dX, center + dY);
+      ctx.stroke();
+
+      const { data } = ctx.getImageData(0, 0, nPixels, nPixels);
+      const pixelData = [];
+      for (let k = 0; k < data.length; k += 4) {
+        pixelData.push(data[k]);
+      }
+      output.push(new Point(pixelData, angleColor(angle * 2)));
+    }
+  }
+  return output;
 }

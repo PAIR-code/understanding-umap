@@ -2,7 +2,7 @@
   import { afterUpdate } from "svelte";
   import kdTree from "kd-tree-javascript";
   import { scaleLinear } from "d3-scale";
-  import { Random } from "../../../shared/js/random";
+  import { makeSine } from "../../../shared/js/sine";
   import Slider from "../../../shared/components/Slider.svelte";
 
   const COLORS = [
@@ -30,31 +30,7 @@
     })
   );
 
-  const random = new Random(42);
-  const constrain = (n, max, min = 0) => Math.max(Math.min(n, max), min);
-  const getRandom = x => Math.floor(x * random.nextFloat());
-  const getRandomPoint = () => ({
-    x: getRandom(width),
-    y: getRandom(height)
-  });
-  const getSinePoint = () => {
-    let x = getRandom(width);
-    let y = (Math.sin((x / width) * 6 * Math.PI) * height) / 4 + height / 2;
-    y = y + getRandom(height / 5) * (random.nextFloat() > 0.5 ? 1 : -1);
-    return {
-      x: constrain(x, width - POINT_RADIUS, POINT_RADIUS),
-      y: constrain(y, height - POINT_RADIUS, POINT_RADIUS)
-    };
-  };
-
-  // construct some data in a specific shape
-  const points = [];
-  for (let i = 0; i < nPoints; i++) {
-    const getPoint = getSinePoint;
-    // const getPoint = getRandomPoint;
-    const point = getPoint();
-    points.push({ ...point, index: i });
-  }
+  const points = makeSine(nPoints, { width, height }, POINT_RADIUS);
 
   let nearestEntries;
   let distances;

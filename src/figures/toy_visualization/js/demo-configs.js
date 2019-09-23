@@ -327,3 +327,24 @@ demos.forEach((d, i) => {
   d.index = i;
   demosByName[d.name] = d;
 });
+
+// Euclidean distance.
+function dist(a, b) {
+  var d = 0;
+  for (var i = 0; i < a.length; i++) {
+    d += (a[i] - b[i]) * (a[i] - b[i]);
+  }
+  return Math.sqrt(d);
+}
+
+// Creates distance matrix for t-SNE input.
+export function distanceMatrix(points) {
+  var matrix = [];
+  var n = points.length;
+  for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+      matrix.push(dist(points[i], points[j]));
+    }
+  }
+  return matrix;
+}

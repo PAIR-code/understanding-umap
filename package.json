@@ -2,6 +2,9 @@
   "name": "umap_article",
   "version": "0.0.1",
   "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/node": "^7.6.1",
+    "esm": "^3.2.25",
     "mdsvex": "^0.4.0",
     "npm-run-all": "^4.1.5",
     "rollup": "^1.12.0",
@@ -15,6 +18,9 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "canvas": "^2.6.0",
+    "color": "^3.1.2",
+    "d3": "^5.12.0",
     "d3-scale": "^3.1.0",
     "kd-tree-javascript": "^1.0.3",
     "umap-js": "^1.3.1"
@@ -24,10 +30,15 @@
     "autobuild": "rollup -c -w",
     "dev": "run-p start:dev autobuild",
     "dev:cech": "FIGURE=cech run-p dev",
+    "dev:comparison": "FIGURE=cech run-p dev",
     "dev:fmnist": "FIGURE=fmnist run-p dev",
+    "dev:hyperparameters": "FIGURE=hyperparameters run-p dev",
+    "dev:line": "FIGURE=line run-p dev",
     "dev:mammoth-umap": "FIGURE=mammoth-umap run-p dev",
     "dev:mammoth-tsne": "FIGURE=mammoth-tsne run-p dev",
+    "dev:optimize": "FIGURE=optimize run-p dev",
     "dev:toy": "FIGURE=toy run-p dev",
+    "dev:toy_comparison": "FIGURE=toy_comparison run-p dev",
     "preprocess": "node src/scripts/compress_mammoth.js",
     "start": "sirv public --single",
     "start:dev": "sirv public --single --dev"

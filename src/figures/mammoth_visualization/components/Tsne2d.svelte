@@ -11,6 +11,7 @@
 
   export let colorIndices;
   export let projections;
+  export let title = "";
 
   const getKey = () => `p=${perplexity}`;
   const getCurrentProjection = () => projections[getKey()];
@@ -30,6 +31,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-sizing: border-box;
   }
 
   .controls {
@@ -39,6 +41,13 @@
     align-items: center;
   }
 
+  .title {
+    text-align: center;
+    width: 100%;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
   label {
     margin-right: 10px;
     width: 200px;
@@ -46,6 +55,9 @@
 </style>
 
 <div class="container">
+  {#if title}
+    <div class="title">{title}</div>
+  {/if}
   <Projection2d {projection} {colorIndices} />
   <div class="controls">
     <label class="label">perplexity: {perplexity}</label>

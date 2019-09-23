@@ -22,8 +22,6 @@
 /**
  * @type {string}
  */
-//tsnejs.REVISION = 'ALPHA';
-var tsnejs = {};
 
 // utility function
 var assert = function(condition, message) {
@@ -231,7 +229,7 @@ function sign(x) {
  * @param {?Object} opt Options.
  * @constructor
  */
-var tSNE = function(opt) {
+export const TSNE = function(opt) {
   opt = opt || {};
   this.perplexity = getopt(opt, "perplexity", 30);
   this.dim = getopt(opt, "dim", 2); // by default 2-D tSNE
@@ -241,7 +239,7 @@ var tSNE = function(opt) {
   this.iter = 0;
 };
 
-tSNE.prototype = {
+TSNE.prototype = {
   // this function takes a set of high-dimensional points
   // and creates matrix P from them using gaussian kernel
   initDataRaw: function(X) {
@@ -408,6 +406,3 @@ tSNE.prototype = {
     return { cost: cost, grad: grad };
   }
 };
-
-tsnejs.tSNE = tSNE; // export tSNE class
-export default tsnejs;

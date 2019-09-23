@@ -25,16 +25,20 @@
   .container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
     width: 100%;
   }
 </style>
 
 <div class="container">
   {#if isLoaded}
-    <Tsne2d {colorIndices} projections={tsneProjections} />
-    <Umap2d {colorIndices} projections={umapProjections} />
+    <Tsne2d
+      {colorIndices}
+      projections={tsneProjections}
+      title={'2D t-SNE projection'} />
+    <Umap2d
+      {colorIndices}
+      projections={umapProjections}
+      title={'2D UMAP projection'} />
   {:else}
     <p>loading...</p>
   {/if}

@@ -22,16 +22,14 @@
   .container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
     width: 100%;
   }
 </style>
 
 <div class="container">
   {#if isLoaded}
-    <Projection3d {colorIndices} {mammoth3d} />
-    <Umap2d {colorIndices} {projections} />
+    <Projection3d {colorIndices} {mammoth3d} title={'Original 3D Data'} />
+    <Umap2d {colorIndices} {projections} title={'2D UMAP Projection'} />
   {:else}
     <p>loading...</p>
   {/if}
