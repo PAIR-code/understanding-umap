@@ -22,12 +22,14 @@
     "color": "^3.1.2",
     "d3": "^5.12.0",
     "d3-scale": "^3.1.0",
+    "gh-pages": "^2.1.1",
     "kd-tree-javascript": "^1.0.3",
     "umap-js": "^1.3.1"
   },
   "scripts": {
     "build": "rollup -c",
     "autobuild": "rollup -c -w",
+    "deploy": "yarn build && node deploy.js",
     "dev": "run-p start:dev autobuild",
     "dev:cech": "FIGURE=cech run-p dev",
     "dev:fmnist": "FIGURE=fmnist run-p dev",

@@ -205,9 +205,7 @@ export const demos = [
   },
   {
     name: "Linked Rings",
-    description:
-      "Points arranged in 3D, on two linked circles. " +
-      "Different runs may give different results.",
+    description: "Points arranged in 3D, on two linked circles. ",
     options: [
       {
         name: "Number Of Points",
@@ -380,7 +378,7 @@ export const extendedDemos = [
   {
     name: "Rotated lines",
     description:
-      "An image of a line rotated smoothly around the center, converted to a n*n dimensional vector.",
+      "An nxn image of a line rotated smoothly around the center, converted to a n*n dimensional vector.",
     options: [
       {
         name: "Number of lines",
@@ -400,7 +398,7 @@ export const extendedDemos = [
   {
     name: "Rotated lines, clustered",
     description:
-      "An image of a line rotated around the center, converted to a n*n dimensional vector. Grouped into clusters of similar angles.",
+      "An nxn image of a line rotated around the center, converted to a n*n dimensional vector. Grouped into clusters of similar angles.",
     options: [
       {
         name: "Number of lines",
