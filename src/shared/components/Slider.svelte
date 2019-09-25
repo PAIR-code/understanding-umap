@@ -3,6 +3,11 @@
   export let min = 0;
   export let max = 100;
   export let step = 1;
+  export let onChange = () => {};
+
+  const onSliderChange = e => {
+    onChange(e.target.value);
+  };
 </script>
 
 <style>
@@ -112,4 +117,4 @@
   }
 </style>
 
-<input type="range" {min} {max} {step} bind:value />
+<input type="range" {min} {max} {step} bind:value on:change={onSliderChange} />

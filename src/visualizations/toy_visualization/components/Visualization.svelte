@@ -43,10 +43,9 @@
       beginRunDemo();
     }
   };
+
   const restart = () => {
-    if (runningDemo) {
-      beginRunDemo();
-    }
+    beginRunDemo();
   };
 
   const beginRunDemo = () => {
@@ -267,10 +266,12 @@
         <div class="parameters-label">UMAP Parameters</div>
         <Parameter
           options={{ name: 'nNeighbors', min: nNeighborsMin, max: nNeighborsMax, step: 1 }}
-          bind:value={nNeighbors} />
+          bind:value={nNeighbors}
+          onChange={restart} />
         <Parameter
           options={{ name: 'minDist', min: minDistMin, max: minDistMax, step: 0.01 }}
-          bind:value={minDist} />
+          bind:value={minDist}
+          onChange={restart} />
       </div>
     </div>
     <div id="data-description">
@@ -278,7 +279,10 @@
       <div id="data-options">
         <div class="parameters-label">Dataset Parameters</div>
         {#each demo.options as demoOption (demoOption.name)}
-          <Parameter options={demoOption} bind:value={demoOption.start} />
+          <Parameter
+            options={demoOption}
+            bind:value={demoOption.start}
+            onChange={restart} />
         {/each}
       </div>
     </div>

@@ -3,6 +3,8 @@
 
   export let options;
   export let value;
+  export let onChange = () => {};
+
   const { name, min, max } = options;
   const step = options.step || 1;
 </script>
@@ -17,6 +19,6 @@
   <span>{name}</span>
   <span>{value}</span>
   <div class="slider-container">
-    <Slider {min} {max} {step} bind:value />
+    <Slider {min} {max} {step} bind:value {onChange} />
   </div>
 </div>
