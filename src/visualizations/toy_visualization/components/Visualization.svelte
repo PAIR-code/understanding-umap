@@ -140,7 +140,6 @@
   @media (min-width: 768px) {
     #data-details #data-controls {
       width: 50%;
-      margin-right: 10%;
       float: left;
     }
   }
@@ -203,36 +202,21 @@
   }
   #data-details #data-description {
     width: 50%;
-    margin-right: 10%;
     float: right;
-    font-size: 14px;
-    line-height: 1.6em;
+    font-size: 13px;
+  }
+
+  #data-description-text {
+    height: 60px;
+    margin-bottom: 5px;
   }
 
   @media (min-width: 768px) {
     #data-details #data-description {
-      width: 40%;
+      width: 50%;
       float: left;
       margin-right: 0;
     }
-  }
-
-  #data-details #share {
-    margin-top: 8px;
-    display: block;
-    color: rgba(0, 0, 0, 0.4);
-    text-decoration: none;
-    font-size: 12px;
-  }
-
-  #data-details #share:hover {
-    text-decoration: underline;
-  }
-
-  #data-details #share i {
-    line-height: 0px;
-    position: relative;
-    top: 7px;
   }
 
   .parameters-label {
@@ -279,12 +263,6 @@
           <span id="step">{step}</span>
         </div>
       </div>
-      <div id="data-options">
-        <div class="parameters-label">Dataset Parameters</div>
-        {#each demo.options as demoOption (demoOption.name)}
-          <Parameter options={demoOption} bind:value={demoOption.start} />
-        {/each}
-      </div>
       <div id="umap-options">
         <div class="parameters-label">UMAP Parameters</div>
         <Parameter
@@ -296,11 +274,14 @@
       </div>
     </div>
     <div id="data-description">
-      <span>{demo.description}</span>
-      <a id="share" style="display:none;" href=".">
-        <i class="material-icons">link</i>
-        Share this view
-      </a>
+      <div id="data-description-text">{demo.description}</div>
+      <div id="data-options">
+        <div class="parameters-label">Dataset Parameters</div>
+        {#each demo.options as demoOption (demoOption.name)}
+          <Parameter options={demoOption} bind:value={demoOption.start} />
+        {/each}
+      </div>
     </div>
+
   </div>
 </div>
