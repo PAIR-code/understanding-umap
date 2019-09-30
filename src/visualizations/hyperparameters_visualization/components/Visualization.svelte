@@ -118,6 +118,7 @@
     writing-mode: vertical-lr;
     text-orientation: sideways;
     transform: rotate(180deg);
+    font-weight: 800;
   }
 
   #left-column-labels {
@@ -153,6 +154,7 @@
     align-items: center;
     justify-content: space-around;
     height: 30px;
+    font-weight: 800;
   }
 
   #menu {
@@ -191,7 +193,7 @@
       <div id="left-column-spacer" />
       <div id="left-column-content">
         <div id="left-column-header">
-          <div id="n-neighbors-header">nNeighbors</div>
+          <div id="n-neighbors-header">n_neighbors</div>
         </div>
         <div id="left-column-labels">
           {#each nNeighborsOptions as nNeighbors}
@@ -202,7 +204,7 @@
     </div>
     <div id="right-column">
       <div id="rows-container">
-        <div id="min-dist-header">minDist</div>
+        <div id="min-dist-header">min_dist</div>
         <div id="min-dist-labels">
           {#each minDistOptions as minDist}
             <div>{minDist}</div>

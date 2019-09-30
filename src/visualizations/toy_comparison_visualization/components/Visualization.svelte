@@ -138,6 +138,7 @@
     justify-content: space-around;
     align-items: flex-end;
     height: 100%;
+    font-weight: 800;
   }
 
   #rows-container {
@@ -152,19 +153,20 @@
     justify-content: space-between;
   }
 
-  #min-dist-labels {
+  #hyperparam-labels {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     justify-content: space-around;
   }
 
-  #min-dist-header {
+  #hyperparam-header {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
     height: 30px;
+    font-weight: 800;
   }
 
   #menu {
@@ -210,8 +212,8 @@
     </div>
     <div id="right-column">
       <div id="rows-container">
-        <div id="min-dist-header">perplexity / nNeighbors</div>
-        <div id="min-dist-labels">
+        <div id="hyperparam-header">perplexity / n_neighbors</div>
+        <div id="hyperparam-labels">
           {#each nNeighborsOptions as nNeighbors}
             <div>{nNeighbors}</div>
           {/each}

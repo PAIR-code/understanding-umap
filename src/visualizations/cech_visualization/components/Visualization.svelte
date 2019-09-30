@@ -15,10 +15,10 @@
   const POINT_RADIUS = 9;
 
   let canvas;
-  let progress = 0;
+  let extent = 0;
 
-  let lastNNearest = 3;
-  let nNearest = 3;
+  let lastNNearest = 5;
+  let nNearest = 5;
 
   const width = 2048;
   const height = 1024;
@@ -90,7 +90,7 @@
     }
 
     const ctx = canvas.getContext("2d");
-    const percent = progress / 100;
+    const percent = extent / 100;
 
     ctx.clearRect(0, 0, width, height);
     // Draw the actual point
@@ -192,11 +192,11 @@
 <div class="container">
   <canvas bind:this={canvas} {width} {height} />
   <div class="controls">
-    <label>progress: {progress}%</label>
-    <Slider min={0} max={100} step={1} bind:value={progress} />
+    <label>extent: {extent}%</label>
+    <Slider min={0} max={100} step={1} bind:value={extent} />
   </div>
   <div class="controls">
     <label>nNearest: {nNearest}</label>
-    <Slider min={2} max={5} step={1} bind:value={nNearest} />
+    <Slider min={2} max={10} step={1} bind:value={nNearest} />
   </div>
 </div>

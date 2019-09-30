@@ -61,8 +61,8 @@
       : color.lighten(0.35).string();
   };
 
-  const toggleProjectionType = () => {
-    isUmapProjection = !isUmapProjection;
+  const toggleUmapSelected = umapSelected => () => {
+    isUmapProjection = umapSelected;
     if (isUmapProjection) {
       scatterGL.updateDataset(umapDataset);
     } else {
@@ -164,25 +164,35 @@
     color: #333;
   }
 
+  .category.selected {
+    font-weight: 800;
+  }
+
   .category:hover {
     text-decoration: underline;
   }
 
-  .projection-type {
-    cursor: pointer;
+  .projection-types {
     position: absolute;
     top: 0;
     left: 0;
-    background-color: aliceblue;
-    padding: 10px;
     width: 150px;
+    flex-direction: column;
+  }
+
+  .projection-type {
+    cursor: pointer;
+    background-color: aliceblue;
+    margin-bottom: 10px;
+    padding: 8px;
+    user-select: none;
   }
 
   .projection-type:hover {
     text-decoration: underline;
   }
 
-  .projection-type .bold {
+  .projection-type.selected {
     font-weight: 900;
   }
 
@@ -199,22 +209,29 @@
 
 <div class="container">
   <div class="scatter-gl-container" bind:this={container} />
-  <div class="projection-type" on:click={toggleProjectionType}>
-    <span class={isUmapProjection ? 'bold' : ''}>UMAP</span>
-    /
-    <span class={!isUmapProjection ? 'bold' : ''}>t-SNE</span>
+  <div class="projection-types">
+    <div
+      class="projection-type {isUmapProjection ? 'selected' : ''}"
+      on:click={toggleUmapSelected(true)}>
+      UMAP
+    </div>
+    <div
+      class="projection-type {isUmapProjection ? '' : 'selected'}"
+      on:click={toggleUmapSelected(false)}>
+      t-SNE
+    </div>
   </div>
   <div class="categories">
     {#if isLoaded}
       <div
-        class="category"
+        class="category {selectedLabelIndices.size === 0 ? 'selected' : ''}"
         style="background-color: aliceblue"
         on:click={onCategoryClick(null)}>
         All
       </div>
       {#each data.labelNames as labelName, labelIndex}
         <div
-          class="category"
+          class="category {selectedLabelIndices.has(labelIndex) ? 'selected' : ''}"
           style="background-color: {getBackgroundColor(labelIndex, selectedLabelIndices)}"
           on:click={onCategoryClick(labelIndex)}>
           {labelName}
