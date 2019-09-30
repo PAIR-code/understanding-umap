@@ -18,9 +18,11 @@ import ToyComparisonVisualization from "../visualizations/toy_comparison_visuali
 
 # { \_metadata.title }
 
-Data visualization is an incredibly powerful tool for intuitively understanding data. However, data scientists and machine learning practitioners often find themselves working with large, high-dimensional datasets - often on the order of hundreds or thousands of dimensions - and this high dimensionality makes computation difficult and data visualization impossible. In order to overcome this challenge, there exist a number of **dimensionality reduction** techniques that can be applied to the data in order to allow it to be visualized.
+<!-- Data visualization is an incredibly powerful tool for intuitively understanding data. However, data scientists and machine learning practitioners often find themselves working with large, high-dimensional datasets - often on the order of hundreds or thousands of dimensions - and this high dimensionality makes computation difficult and data visualization impossible. In order to overcome this challenge, there exist a number of  techniques that can be applied to the data in order to allow it to be visualized.
 
-The classic dimensionality algorithm is **PCA** (principal componenent analysis), which uses matrix factorization to find the dimensions that carry the most information - essentially, PCA "flattens" or "smears" the data into a lower dimensional space, which is useful for quick and dirty analysis but can obscure details. A widely used alternative, **t-SNE** (t-distributed stochastic neighbor embedding), uses a neighbor-based graph layout approach to project the data into lower dimensions, preserving much more detail at the expense of "warping" the data.
+The classic dimensionality algorithm is **PCA** (principal componenent analysis), which uses matrix factorization to find the dimensions that carry the most information - essentially, PCA "flattens" or "smears" the data into a lower dimensional space, which is useful for quick and dirty analysis but can obscure details. A widely used alternative, **t-SNE** (t-distributed stochastic neighbor embedding), uses a neighbor-based graph layout approach to project the data into lower dimensions, preserving much more detail at the expense of "warping" the data. -->
+
+Dimensionality reduction is a key tool in the toolbox of data scientists and machine learning practitioners, offering a powerful window into visualizing and understanding large, high-dimensional datasets. One of the most widely used techniques for visualization is t-SNE (t-distributed stochastic neighbor embedding), but its performance suffers with large datasets and using it correctly can be [challenging](https://distill.pub/2016/misread-tsne/).
 
 [UMAP](https://github.com/lmcinnes/umap) (universal manifold approximation and projection) is a new technique by McInnes et al. that offers a number of compelling advantages over t-SNE, most notably increased speed and better preservation of the data's global structure. In this article, we'll dig into the theory behind UMAP in order to better understand how the algorithm works, how to use it effectively, and how its performance compares with t-SNE.
 
@@ -31,11 +33,11 @@ The classic dimensionality algorithm is **PCA** (principal componenent analysis)
   </span>
 </Figure>
 
-So what does UMAP bring to the table? Most importantly, UMAP is fast, scaling well in terms of both dataset size and dimensionality. For example, UMAP can project the 784-dimensional, 70,000-point MNIST dataset in less than 3 minutes, compared to 45 minutes for sklearn's t-SNE implementation. In addition, UMAP tends to better preserve the global structure of the data (less "warping"). This is due to UMAP's strong theoretical foundations, which allow the algorithm to strike a balance between emphasizing local versus global structure. Although the mathematics the algorithm relies on are quite advanced, the intuition behind them is actually quite simple. By understanding what's going on under the hood, it becomes easier to understand how to adjust the algorithm's parameters and interpret its results.
+So what does UMAP bring to the table? Most importantly, UMAP is fast, scaling well in terms of both dataset size and dimensionality. For example, UMAP can project the 784-dimensional, 70,000-point [**MNIST**](http://yann.lecun.com/exdb/mnist/) dataset in less than 3 minutes, compared to 45 minutes for scikit-learn's t-SNE implementation. In addition, UMAP tends to better preserve the global structure of the data. This is due to UMAP's strong theoretical foundations, which allow the algorithm to better strike a balance between emphasizing local versus global structure. Although the mathematics the algorithm relies on are advanced, the intuition behind them is actually quite simple. By understanding what's going on under the hood, it becomes easier to understand how to adjust the algorithm's parameters and interpret its results.
 
 ## UMAP vs t-SNE, part 1
 
-The following visualization shows a comparison between using UMAP and t-SNE to project the **Fashion MNIST** dataset down to 3 dimensions. Notice how well clustered each different category is (local structure), while similar categories (such as "sandal", "sneaker", and "ankle boot") tend to colocate together (global structure).
+The following visualization shows a comparison between using UMAP and t-SNE to project a subset of the 784-dimensional [**Fashion MNIST**](https://github.com/zalandoresearch/fashion-mnist) dataset down to 3 dimensions. Notice how well clustered each different category is (local structure), while similar categories (such as "sandal", "sneaker", and "ankle boot") tend to colocate together (global structure).
 
 <Figure>
   <FmnistVisualization />
@@ -48,16 +50,9 @@ While both algorithms exhibit strong local clustering and group similar categori
 
 ## A dip into UMAP theory
 
-UMAP, at its core, works very similarly to t-SNE - they're both graph layout algorithms. Essentially, UMAP constructs a weighted graph from the high dimensional data, with edge weights representing how close a given point is to its neighbor. It then optimizes a lower-dimensional graph to be as similar as possible in structure to the original, high-dimensional graph.
-UMAP relies on some advanced mathematics to make sure that this process strikes a good balance between local and global structure. In practice, this means that UMAP often preserves much more of the global structure of the data than t-SNE.
+UMAP, at its core, works very similarly to t-SNE - both are graph layout algorithms. In the simplest sense, UMAP constructs a high dimensional graph from the data then optimizes a low-dimensional graph to be as structurally similar as possible. While the mathematics UMAP uses to construct the high-dimensional graph are advanced, the intuition behind them is remarkably simple.
 
-In order to construct the initial high-dimensional graph, UMAP relies on constructing what’s known as a **Čech complex**, which is a way of representing a topology combinatorially (using sets rather than continuous geometry). In order to get there, we’ll use a basic building block called a **simplex**. Geometrically, a simplex is a k-dimensional object formed by connecting k + 1 points - for example, a 0-simplex is a point, a 1-simplex is a line, and a 2-simplex is a triangle. By thinking of our data as a set of simplices, we can capture a representation of the topology, and by combining those simplices in a specific way to form a Čech complex, we get some theoretical guarantees about how well it represents the topology.
-
-We begin by looking at each point in our data as a sample from a continuous, high-dimensional shape (topology). We can think of each point as a 0-simplex. By extending out from each point some radius r, and connecting points that overlap, we can construct sets of 1-, 2-, and higher-dimensional simplices. This simplicial complex does a reasonable job of approximating the fundamental topology of the dataset, and by considering just the 0- and 1-simplices, we’ve effectively just constructed a graph, which can be readily projected into a lower-dimensional analogue.
-
-Unfortunately, real-world high-dimensional data presents a problem that UMAP needs to overcome - picking the right sized radius. Too small a radius and we’ll tend towards isolated, local clusters of points. Too large, and everything becomes connected. This problem is exacerbated by the **curse of dimensionality**, where distances between points become increasingly similar in higher dimensions. UMAP solves this problem in a clever way: Rather than using a fixed radius, UMAP uses a variable radius determined for each point based on the distance to its kth nearest neighbor. Within this local radius, connectedness is then made “fuzzy” by making each connection a probability, with further points less likely to be connected. Since we don’t want any points to be completely isolated, a constraint is added that all points must be connected to at least its closest neighboring point. The final output of this process is a weighted graph, with edge weights representing the likelihood that two points are “connected” in our high-dimensional manifold.
-
-The following interactive example demonstrates a rough version of how UMAP constructs the simplicial complex from a toy dataset.
+In order to construct the initial high-dimensional graph UMAP builds something called a "fuzzy simplicial complex". This is just a special way of describing a weighted graph, with edge weights representing the likelihood that two points are connected. To determine connectedness, UMAP extends a radius outwards from each point, connecting the points when those radii overlap. Choosing this radius is critical - too small a choice will lead to small, isolated clusters, while too large a choice will connect everything together. UMAP overcomes this challenge by choosing a radius locally, based on the distance to each point's nth nearest neighbor. By stipulating that each point is connected to its nearest neighbor while decreasing the likelihood of connection as the distance grows, UMAP is able to strike a balance between representing local and global structure.
 
 <Figure>
   <CechVisualization />
@@ -66,15 +61,13 @@ The following interactive example demonstrates a rough version of how UMAP const
   </span>
 </Figure>
 
-Note that since each point’s local notion of distance may be different than its neighbors’, we must resolve whether two points are connected based on potentially different directed edge weights. UMAP squares this inconsistency by computing the probability that at least one of the edges exist.
+Once the high-dimensional graph is constructed, UMAP optimizes the layout of a low-dimensional analogue to be as similar as possible. This process is essentially the same as in t-SNE, using a few well-known tricks to speed up the process.
 
-Once the final, fuzzy simplicial complex is constructed, UMAP projects the data into lower dimensions essentially via a force-directed graph layout algorithm. This optimization step is actually very similar to t-SNE, but by jumping through the theoretical hoops while constructing our initial simplicial complex, UMAP is able to accelerate the optimization and preserve much more global structure than t-SNE.
-
-<!-- In case you're interested in how UMAP constructs the high-dimensional graph representation of the data, you can learn more about the surprisingly intuitive process in the supplementary section: **A deeper dive into UMAP theory**. -->
+The key to effectively using UMAP lies in understanding the construction of the initial, high-dimensional graph. Though the ideas behind the process are very intuitive, the algorithm relies on some advanced mathematics to give strong theoretical guarantees about how well this graph actually represents the data. Interested readers can dive deeper into the entire process in the final, supplementary section: [A deeper dive into UMAP theory](#a-deeper-dive-into-umap-theory).
 
 ## UMAP Parameters
 
-UMAP offers a number of parameters that tend to be more understandable than the `perplexity` parameter in t-SNE. We'll consider the two most commonly used parameters: `n_neighbors` and `min_dist`, which are used to control the balance between local and global structure in the final projection.
+UMAP offers a number of parameters that are much more understandable than the `perplexity` parameter in t-SNE. We'll consider the two most commonly used parameters: `n_neighbors` and `min_dist`, which are used to control the balance between local and global structure in the final projection.
 
 <Figure>
   <HyperparametersVisualization />
@@ -98,9 +91,9 @@ The following visualization - extended from excellent work by [Max Noichl](https
 
 While most applications of UMAP involve projection from high-dimensional data, the projection from 3D serves as a useful analogy to understand how UMAP prioritizes global vs local structure depending on its parameters. As `n_neighbors` increases, UMAP connects more and more neighboring points when constructing the graph representation of the high-dimensional data, which leads to a projection that more accurately reflects the global structure of the data. At very low values, any notion of global structure is almost completely lost. As the `min_dist` parameter increases, UMAP tends to "spread out" the projected points, leading to decreased clustering of the data and less emphasis on global structure.
 
-## UMAP vs t-SNE
+## UMAP vs t-SNE, revisited
 
-UMAP provides a number of advantages over t-SNE, including increased speed and performance that scales much better with dataset size and dimensionality. However, the biggest difference between the two algorithms' output is the balance between local and global structure - UMAP is much better at preserving global structure in the final projection. This means that the inter-cluster relations are potentially more meaningful than in t-SNE. However, any given axis or distance in lower dimensions still isn’t directly interpretable in the way of techniques such as PCA.
+The biggest difference between the the output of UMAP when compared with t-SNE is the balance between local and global structure - UMAP is often much better at preserving global structure in the final projection. This means that the inter-cluster relations are potentially more meaningful than in t-SNE. However, it's important to note that, because UMAP and t-SNE both "warp" the high-dimensional shape of the data when projecting to lower dimensions, any given axis or distance in lower dimensions still isn’t directly interpretable in the way of techniques such as PCA.
 
 <Figure>
   <MammothTsneVisualization />
@@ -109,7 +102,7 @@ UMAP provides a number of advantages over t-SNE, including increased speed and p
   </span>
 </Figure>
 
-Going back to the 3D mammoth example, we can easily see striking differences between the two algorithms' output. For almost every value of the `perplexity` parameter, t-SNE tends to "spread out" the projected data with very little preservation of the global structure. In contrast, UMAP tends to group adjacent pieces of the higher-dimensional structure together in low dimensions, which reflects an increased preservation of global structure. It's also notable that t-SNE projections vary widely from run to run, with different pieces of the higher-dimensional data projected to wildly different locations. While UMAP is also a stochastic algorithm, it's striking how similar the resulting projections are from run to run and with different parameters. This is due, again, to UMAP's increased emphasis on global structure in comparison to t-SNE.
+Going back to the 3D mammoth example, we can easily see striking differences between the two algorithms' output. For almost every value of the `perplexity` parameter, t-SNE tends to "spread out" the projected data with very little preservation of the global structure. In contrast, UMAP tends to group adjacent pieces of the higher-dimensional structure together in low dimensions, which reflects an increased preservation of global structure. It's also notable that t-SNE projections vary widely from run to run, with different pieces of the higher-dimensional data projected to different locations. While UMAP is also a stochastic algorithm, it's striking how similar the resulting projections are from run to run and with different parameters. This is due, again, to UMAP's increased emphasis on global structure in comparison to t-SNE.
 
 <Figure>
   <ToyComparisonVisualization />
@@ -120,11 +113,11 @@ Going back to the 3D mammoth example, we can easily see striking differences bet
 
 ## Conclusion
 
-UMAP is an incredibly powerful tool in the data scientist's arsenal, and offers a number of compelling advantages over alternative dimensionality reduction techniques. While both UMAP and t-SNE produce similar output, the increased speed and better preservation of global structure make UMAP a more effective tool for visualizing high dimensional data.
+UMAP is an incredibly powerful tool in the data scientist's arsenal, and offers a number of compelling advantages over t-SNE. While both UMAP and t-SNE produce similar output, the increased speed and better preservation of global structure make UMAP a more effective tool for visualizing high dimensional data.
 
-<Spacer height={400} />
+<Spacer height={1000} />
 
-## A deeper dive into UMAP theory
+<h2 id="a-deeper-dive-into-umap-theory">A deeper dive into UMAP theory</h2>
 
 Most dimensionality reduction algorithms fit into either one of two broad categories: Matrix factorization (such as PCA) or Graph layout (such as t-SNE). At its core, UMAP is a graph layout algorithm, very similar to t-SNE, but with a number of key theoretical underpinnings that give the algorithm a more solid footing.
 
@@ -135,15 +128,6 @@ In order to construct the initial high-dimensional graph, UMAP relies on constru
 We begin by considering each point in our data as a sample from a continuous, high-dimensional shape (our topology). We can think of each point as a 0-simplex. By extending out from each point some radius r, and connecting points that overlap, we can construct sets of 1-, 2-, and higher-dimensional simplices. This simplicial complex does a reasonable job of approximating the fundamental topology of the dataset, and by considering just the 0- and 1-simplices, we’ve effectively just constructed a graph, which can be readily projected into a lower-dimensional analogue.
 
 Unfortunately, real-world high-dimensional data presents a problem that UMAP needs to overcome - picking the right sized radius. Too small a radius and we’ll tend towards isolated, local clusters of points. Too large, and everything becomes connected. This problem is exacerbated by the **curse of dimensionality**, where distances between points become increasingly similar in higher dimensions. UMAP solves this problem in a clever way: Rather than using a fixed radius, UMAP uses a variable radius determined for each point based on the distance to its kth nearest neighbor. Within this local radius, connectedness is then made “fuzzy” by making each connection a probability, with further points less likely to be connected. Since we don’t want any points to be completely isolated, a constraint is added that all points must be connected to at least its closest neighboring point. The final output of this process is a weighted graph, with edge weights representing the likelihood that two points are “connected” in our high-dimensional manifold.
-
-The following interactive example demonstrates a rough version of how UMAP constructs the simplicial complex from a toy dataset.
-
-<Figure>
-  <CechVisualization />
-  <span slot="caption">
-    Adjust the slider to extend a radius outwards from each point, computed by the distance to its nth nearest neighbor. Notice that past the intersection with the first neighbor, the radius begins to get fuzzy, with subsequent connections appearing with less weight;
-  </span>
-</Figure>
 
 Note that since each point’s local notion of distance may be different than its neighbors’, we must resolve whether two points are connected based on potentially different directed edge weights. UMAP squares this inconsistency by computing the probability that at least one of the edges exist.
 
