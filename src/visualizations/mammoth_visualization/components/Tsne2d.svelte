@@ -3,7 +3,8 @@
   import Slider from "../../../shared/components/Slider.svelte";
   import Projection2d from "./Projection2D.svelte";
 
-  const perplexities = [5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+  // prettier-ignore
+  const perplexities = [5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 500, 1000];
 
   let canvas;
   let perplexityIndex = 4;
