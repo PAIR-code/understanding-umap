@@ -36,7 +36,6 @@
     "dev:hyperparameters": "FIGURE=hyperparameters run-p dev",
     "dev:mammoth-umap": "FIGURE=mammoth-umap run-p dev",
     "dev:mammoth-tsne": "FIGURE=mammoth-tsne run-p dev",
-    "dev:optimize": "FIGURE=optimize run-p dev",
     "dev:toy": "FIGURE=toy run-p dev",
     "dev:toy_comparison": "FIGURE=toy_comparison run-p dev",
     "preprocess": "node src/scripts/compress_mammoth.js",

@@ -12,8 +12,6 @@ const figure = process.env.FIGURE;
 let input = "src/main.js";
 if (figure === "cech") {
   input = "src/visualizations/cech_visualization/main.js";
-} else if (figure === "line") {
-  input = "src/visualizations/line_rotation/main.js";
 } else if (figure === "fmnist") {
   input = "src/visualizations/fmnist_visualization/main.js";
 } else if (figure === "hyperparameters") {
@@ -22,12 +20,10 @@ if (figure === "cech") {
   input = "src/visualizations/mammoth_visualization/umap.js";
 } else if (figure === "mammoth-tsne") {
   input = "src/visualizations/mammoth_visualization/tsne.js";
-} else if (figure === "optimize") {
-  input = "src/visualizations/graph_optimization/main.js";
-} else if (figure === "toy") {
-  input = "src/visualizations/toy_visualization/main.js";
 } else if (figure === "toy_comparison") {
   input = "src/visualizations/toy_comparison_visualization/main.js";
+} else if (figure === "toy") {
+  input = "src/visualizations/toy_visualization/main.js";
 }
 
 export default {
