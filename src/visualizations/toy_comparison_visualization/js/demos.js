@@ -156,6 +156,7 @@ export const optionsOverrides = [
 const allDemos = [...originalDemos, ...extendedDemos].map((demo, i) => {
   const modified = JSON.parse(JSON.stringify(demo)); // Simple clone
   modified.generator = demo.generator;
+  modified.previewOverride = demo.previewOverride;
   modified.options = modified.options.map((option, j) => {
     const override = optionsOverrides[i];
     option.start = override.options[j].start;

@@ -2,7 +2,7 @@
   import { afterUpdate, onMount } from "svelte";
   import { allDemos as demos } from "../../../shared/js/toy-configs";
   import { visualize, getPoints } from "../js/visualize";
-  import { runDemo } from "../js/run-demo";
+  import { runDemo, N_EPOCHS } from "../js/run-demo";
 
   import Preview from "./Preview.svelte";
   import Parameter from "./Parameter.svelte";
@@ -15,7 +15,6 @@
   let demo = demos[selectedDemoIndex];
   let step = 0;
   let canvas;
-  let maxSteps = 200;
 
   let nNeighbors = 15;
   let nNeighborsMin = 3;
@@ -60,7 +59,7 @@
 
     runningDemo = runDemo(points, canvas, umapOptions, currentStep => {
       step = currentStep;
-      if (step >= maxSteps) {
+      if (step >= N_EPOCHS) {
         isRunning = false;
         isFinished = true;
         runningDemo.pause();
@@ -206,7 +205,7 @@
   }
 
   #data-description-text {
-    height: 60px;
+    min-height: 60px;
     margin-bottom: 5px;
   }
 

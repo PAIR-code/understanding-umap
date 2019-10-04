@@ -1,7 +1,11 @@
 <script>
   import { afterUpdate, onMount } from "svelte";
   import { allDemos as demos } from "../../../shared/js/toy-configs";
-  import { visualize, getPoints } from "../../toy_visualization/js/visualize";
+  import {
+    visualize,
+    getPoints,
+    getDemoPreviewOverride
+  } from "../../toy_visualization/js/visualize";
   import Preview from "./Preview.svelte";
   import { UMAP } from "umap-js";
   import preprocessedDemos from "../js/preprocessed.json";
@@ -80,24 +84,24 @@
     justify-content: space-between;
   }
 
-  #figures-container {
+  .figures-container {
     display: flex;
     font-size: 12px;
     width: 60%;
   }
 
-  #left-column {
+  .left-column {
     width: 40px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
   }
 
-  #left-column-spacer {
+  .left-column-spacer {
     height: 40px;
   }
 
-  #left-column-content {
+  .left-column-content {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -105,7 +109,7 @@
     height: 100%;
   }
 
-  #left-column-header {
+  .left-column-header {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -114,14 +118,14 @@
     width: 30px;
   }
 
-  #n-neighbors-header {
+  .n-neighbors-header {
     writing-mode: vertical-lr;
     text-orientation: sideways;
     transform: rotate(180deg);
     font-weight: 800;
   }
 
-  #left-column-labels {
+  .left-column-labels {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -129,26 +133,26 @@
     height: 100%;
   }
 
-  #rows-container {
+  .rows-container {
     /* padding: 40px 0 0 40px; */
     position: relative;
   }
 
-  #row {
+  .row {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
   }
 
-  #min-dist-labels {
+  .min-dist-labels {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     justify-content: space-around;
   }
 
-  #min-dist-header {
+  .min-dist-header {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -157,29 +161,38 @@
     font-weight: 800;
   }
 
-  #menu {
+  .menu {
     display: flex;
     flex-direction: column;
     width: 40%;
   }
 
-  #demo-description {
+  .demo-description {
     width: 400px;
     padding: 4px;
   }
 
-  #demo-select {
+  .demo-text {
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+
+  .demo-select {
     display: flex;
     flex-direction: column;
     margin-top: 44px;
   }
 
-  #rows {
+  .demo-parameter-name {
+    font-weight: 600;
+  }
+
+  .rows {
     display: flex;
     flex-direction: column;
   }
 
-  #row {
+  .row {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -188,31 +201,31 @@
 </style>
 
 <div class="container">
-  <div id="figures-container">
-    <div id="left-column">
-      <div id="left-column-spacer" />
-      <div id="left-column-content">
-        <div id="left-column-header">
-          <div id="n-neighbors-header">n_neighbors</div>
+  <div class="figures-container">
+    <div class="left-column">
+      <div class="left-column-spacer" />
+      <div class="left-column-content">
+        <div class="left-column-header">
+          <div class="n-neighbors-header">n_neighbors</div>
         </div>
-        <div id="left-column-labels">
+        <div class="left-column-labels">
           {#each nNeighborsOptions as nNeighbors}
             <div>{nNeighbors}</div>
           {/each}
         </div>
       </div>
     </div>
-    <div id="right-column">
-      <div id="rows-container">
-        <div id="min-dist-header">min_dist</div>
-        <div id="min-dist-labels">
+    <div class="right-column">
+      <div class="rows-container">
+        <div class="min-dist-header">min_dist</div>
+        <div class="min-dist-labels">
           {#each minDistOptions as minDist}
             <div>{minDist}</div>
           {/each}
         </div>
-        <div id="rows">
+        <div class="rows">
           {#each entries as row, rowIndex}
-            <div id="row">
+            <div class="row">
               {#each row as points}
                 <Preview
                   {points}
@@ -227,19 +240,27 @@
       </div>
     </div>
   </div>
-  <div id="menu">
-    <div id="demo-select">
+  <div class="menu">
+    <div class="demo-select">
       {#each groupDemos(6) as group, groupIndex}
         <div class="demos">
           {#each group as demo, i}
             <Preview
-              points={getPoints(demo)}
+              points={demo.previewOverride ? getDemoPreviewOverride(demo) : getPoints(demo)}
               onClick={handlePreviewClick(groupIndex * 6 + i)}
               selected={groupIndex * 6 + i === selectedDemoIndex} />
           {/each}
         </div>
       {/each}
     </div>
-    <div id="demo-description">{selectedDemo.description}</div>
+    <div class="demo-description">
+      <div class="demo-text">{selectedDemo.description}</div>
+      {#each selectedDemo.options as option}
+        <div class="demo-parameters">
+          <span class="demo-parameter-name">{option.name}:</span>
+          <span>{option.start}</span>
+        </div>
+      {/each}
+    </div>
   </div>
 </div>

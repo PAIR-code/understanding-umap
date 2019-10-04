@@ -37,6 +37,7 @@
   }
   .demo-data.non-selectable {
     cursor: default;
+    box-shadow: none;
   }
 
   @media (min-width: 480px) {

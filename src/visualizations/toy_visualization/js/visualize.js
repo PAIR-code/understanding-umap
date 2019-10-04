@@ -16,8 +16,19 @@ export function getPoints(demo, params) {
   if (!params) {
     params = demo.options.map(option => option.start);
   }
-  const points = demo.generator.apply(null, params);
-  return points;
+
+  return demo.generator.apply(null, params);
+}
+
+export function getDemoPreviewOverride(demo, params) {
+  if (!params) {
+    params = demo.options.map(option => option.start);
+  }
+
+  if (demo.previewOverride) {
+    return demo.previewOverride.apply(null, params);
+  }
+  return null;
 }
 
 // Helper function to draw a circle.

@@ -1,7 +1,11 @@
 <script>
   import { afterUpdate, onMount } from "svelte";
   import demos from "../js/demos";
-  import { visualize, getPoints } from "../../toy_visualization/js/visualize";
+  import {
+    visualize,
+    getPoints,
+    getDemoPreviewOverride
+  } from "../../toy_visualization/js/visualize";
   import Preview from "./Preview.svelte";
   import { UMAP } from "umap-js";
   import preprocessedDemos from "../js/preprocessed.json";
@@ -14,8 +18,8 @@
 
   const GROUP_SIZE = 8;
 
-  const nNeighborsOptions = [2, 5, 15, 30, 50, 100];
-  const perplexityOptions = [2, 5, 15, 30, 50, 100];
+  const nNeighborsOptions = [3, 5, 15, 30, 50, 100];
+  const perplexityOptions = [3, 5, 15, 30, 50, 100];
 
   const projections = [];
 
@@ -92,24 +96,24 @@
     justify-content: space-between;
   }
 
-  #figures-container {
+  .figures-container {
     display: flex;
     font-size: 12px;
     width: 80%;
   }
 
-  #left-column {
+  .left-column {
     width: 40px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
   }
 
-  #left-column-spacer {
+  .left-column-spacer {
     height: 40px;
   }
 
-  #left-column-content {
+  .left-column-content {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -117,22 +121,7 @@
     height: 100%;
   }
 
-  #left-column-header {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    height: 100%;
-    width: 30px;
-  }
-
-  #n-neighbors-header {
-    writing-mode: vertical-lr;
-    text-orientation: sideways;
-    transform: rotate(180deg);
-  }
-
-  #left-column-labels {
+  .left-column-labels {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -141,26 +130,14 @@
     font-weight: 800;
   }
 
-  #rows-container {
-    /* padding: 40px 0 0 40px; */
-    position: relative;
-  }
-
-  #row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  #hyperparam-labels {
+  .hyperparam-labels {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     justify-content: space-around;
   }
 
-  #hyperparam-header {
+  .hyperparam-header {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -169,58 +146,72 @@
     font-weight: 800;
   }
 
-  #menu {
+  .menu {
     display: flex;
     width: 80%;
     padding-left: 35px;
     box-sizing: border-box;
   }
 
-  #demo-description {
-    width: 400px;
-    padding: 4px;
+  .demo-select {
+    display: flex;
+    flex-direction: column;
+  }
+  .rows-container {
+    /* padding: 40px 0 0 40px; */
+    position: relative;
   }
 
-  #demo-select {
+  .rows {
     display: flex;
     flex-direction: column;
   }
 
-  #rows {
-    display: flex;
-    flex-direction: column;
-  }
-
-  #row {
+  .row {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
   }
+
+  .demo-description {
+    width: 400px;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .demo-text {
+    margin-bottom: 10px;
+  }
+
+  .demo-parameter-name {
+    font-weight: 600;
+  }
 </style>
 
 <div class="container">
-  <div id="figures-container">
-    <div id="left-column">
-      <div id="left-column-spacer" />
-      <div id="left-column-content">
-        <div id="left-column-labels">
+  <div class="figures-container">
+    <div class="left-column">
+      <div class="left-column-spacer" />
+      <div class="left-column-content">
+        <div class="left-column-labels">
           <div>t-SNE</div>
           <div>UMAP</div>
         </div>
       </div>
     </div>
-    <div id="right-column">
-      <div id="rows-container">
-        <div id="hyperparam-header">perplexity / n_neighbors</div>
-        <div id="hyperparam-labels">
+    <div class="right-column">
+      <div class="rows-container">
+        <div class="hyperparam-header">perplexity / n_neighbors</div>
+        <div class="hyperparam-labels">
           {#each nNeighborsOptions as nNeighbors}
             <div>{nNeighbors}</div>
           {/each}
         </div>
-        <div id="rows">
+        <div class="rows">
           {#each Object.keys(entries) as key}
-            <div id="row">
+            <div class="row">
               {#each entries[key] as points}
                 <Preview
                   {points}
@@ -235,19 +226,27 @@
       </div>
     </div>
   </div>
-  <div id="menu">
-    <div id="demo-select">
+  <div class="menu">
+    <div class="demo-select">
       {#each groupDemos(GROUP_SIZE) as group, groupIndex}
         <div class="demos">
           {#each group as demo, i}
             <Preview
-              points={getPoints(demo)}
+              points={demo.previewOverride ? getDemoPreviewOverride(demo) : getPoints(demo)}
               onClick={handlePreviewClick(groupIndex * GROUP_SIZE + i)}
               selected={groupIndex * GROUP_SIZE + i === selectedDemoIndex} />
           {/each}
         </div>
       {/each}
     </div>
-    <div id="demo-description">{selectedDemo.description}</div>
+    <div class="demo-description">
+      <div class="demo-text">{selectedDemo.description}</div>
+      {#each selectedDemo.options as option}
+        <div class="demo-parameters">
+          <div class="demo-parameter-name">{option.name}:</div>
+          <div>{option.start}</div>
+        </div>
+      {/each}
+    </div>
   </div>
 </div>

@@ -29,6 +29,7 @@ for (let demo of demos) {
       const umap = new UMAP({
         nNeighbors,
         minDist,
+        nEpochs: 500,
         nComponents: 2
       });
       const projection = umap.fit(points);

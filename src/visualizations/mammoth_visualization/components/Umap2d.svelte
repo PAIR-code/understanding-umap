@@ -3,7 +3,7 @@
   import Slider from "../../../shared/components/Slider.svelte";
   import Projection2d from "./Projection2D.svelte";
 
-  const neighbors = [2, 5, 10, 15, 20, 50, 100, 200];
+  const neighbors = [3, 5, 10, 15, 20, 50, 100, 200];
   const dists = ["0.0", "0.1", "0.25", "0.5", "0.8", "0.99"];
 
   let canvas;
@@ -55,7 +55,7 @@
 
   label {
     margin-right: 10px;
-    width: 200px;
+    width: 220px;
   }
 </style>
 
@@ -65,7 +65,7 @@
   {/if}
   <Projection2d {projection} {colorIndices} />
   <div class="controls">
-    <label class="label">nNeighbors: {nNeighbors}</label>
+    <label class="label">n_neighbors: {nNeighbors}</label>
     <Slider
       min={0}
       max={neighbors.length - 1}
@@ -73,7 +73,7 @@
       bind:value={nNeighborsIndex} />
   </div>
   <div class="controls">
-    <label class="label">minDist: {minDist}</label>
+    <label class="label">min_dist: {minDist}</label>
     <Slider min={0} max={dists.length - 1} step={1} bind:value={distsIndex} />
   </div>
 </div>

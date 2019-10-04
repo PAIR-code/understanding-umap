@@ -393,7 +393,8 @@ export const extendedDemos = [
         start: 10
       }
     ],
-    generator: generators.continuousLineImages
+    generator: generators.continuousLineImages,
+    previewOverride: generators.linePreview
   },
   {
     name: "Rotated lines, clustered",
@@ -419,12 +420,13 @@ export const extendedDemos = [
         start: 10
       }
     ],
-    generator: generators.clusteredLineImages
+    generator: generators.clusteredLineImages,
+    previewOverride: generators.linePreview
   },
   {
     name: "Sine frequency",
     description:
-      "A sine wave parameterized by frequency. Hue corresponds to frequency.",
+      "A vector of a sine wave parameterized by frequency. Hue corresponds to frequency.",
     options: [
       {
         name: "Number of vectors",
@@ -439,12 +441,13 @@ export const extendedDemos = [
         start: 100
       }
     ],
-    generator: generators.sineFrequency
+    generator: generators.sineFrequency,
+    previewOverride: generators.sinePreview
   },
   {
     name: "Sine phase",
     description:
-      "A sine wave parameterized by phase. Hue corresponds to phase.",
+      "A vector of a sine wave parameterized by phase. Hue corresponds to phase.",
     options: [
       {
         name: "Number of vectors",
@@ -459,7 +462,8 @@ export const extendedDemos = [
         start: 100
       }
     ],
-    generator: generators.sinePhase
+    generator: generators.sinePhase,
+    previewOverride: generators.sinePreview
   }
 ];
 

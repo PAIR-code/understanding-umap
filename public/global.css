@@ -29,6 +29,7 @@ a:visited {
 
 p {
   font-size: 1.2rem;
+  line-height: 1.6em;
 }
 
 label {
@@ -54,6 +55,15 @@ input:disabled {
 
 input[type="range"] {
   height: 0;
+}
+
+code {
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(27, 31, 35, 0.05);
+  border-radius: 3px;
 }
 
 button {

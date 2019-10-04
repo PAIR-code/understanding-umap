@@ -196,7 +196,7 @@
     <Slider min={0} max={100} step={1} bind:value={extent} />
   </div>
   <div class="controls">
-    <label>nNearest: {nNearest}</label>
+    <label>n_nearest: {nNearest}</label>
     <Slider min={2} max={10} step={1} bind:value={nNearest} />
   </div>
 </div>

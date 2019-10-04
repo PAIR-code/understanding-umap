@@ -23,6 +23,15 @@
     onCategoryClick(labelIndex)();
   };
 
+  window._selectFmnistLabel = (e, label) => {
+    const labelIndex = data.labelNames.findIndex(l => {
+      return l.toLowerCase() === label;
+    });
+    if (labelIndex !== -1) {
+      onCategoryClick(labelIndex)(e);
+    }
+  };
+
   const onCategoryClick = index => e => {
     if (e && e.shiftKey) {
       selectedLabelIndices.add(index);

@@ -1,4 +1,4 @@
-import { distanceMatrix } from "../../toy_visualization/js/demo-configs";
+import { distanceMatrix } from "../../../shared/js/toy-configs";
 import { getPoints } from "../../toy_visualization/js/visualize";
 import { UMAP } from "umap-js";
 import { TSNE } from "../../../shared/js/tsne";
@@ -6,8 +6,8 @@ import demos from "../js/demos";
 import fs from "fs";
 import path from "path";
 
-const nNeighborsOptions = [2, 5, 15, 30, 50, 100];
-const perplexityOptions = [2, 5, 15, 30, 50, 100];
+const nNeighborsOptions = [3, 5, 15, 30, 50, 100];
+const perplexityOptions = [3, 5, 15, 30, 50, 100];
 const minDist = 0.1;
 
 const output = [];
@@ -23,6 +23,7 @@ for (let demo of demos) {
     const umap = new UMAP({
       nNeighbors,
       minDist,
+      nEpochs: 500,
       nComponents: 2
     });
     const projection = umap.fit(points);

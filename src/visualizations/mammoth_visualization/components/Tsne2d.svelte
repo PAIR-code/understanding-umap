@@ -1,10 +1,11 @@
 <script>
   import { afterUpdate, onMount } from "svelte";
   import Slider from "../../../shared/components/Slider.svelte";
+  import { TSNE_MAMMOTH_PERPLEXITIES } from "../../../shared/js/parameters";
   import Projection2d from "./Projection2D.svelte";
 
   // prettier-ignore
-  const perplexities = [5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 500, 1000];
+  const perplexities = [...TSNE_MAMMOTH_PERPLEXITIES];
 
   let canvas;
   let perplexityIndex = 4;

@@ -538,6 +538,18 @@ export function clusteredLineImages(nLines, nClusters, nPixels = 28) {
   return output;
 }
 
+export function linePreview() {
+  const nPixels = Array.prototype.slice.apply(arguments).pop();
+  const output = [];
+  for (let x = 0; x < nPixels; x++) {
+    for (let y = 0; y < nPixels; y++) {
+      const vector = [x, y];
+      output.push(new Point(vector, y === x ? "aliceblue" : "black"));
+    }
+  }
+  return output;
+}
+
 export function sineFrequency(nVectors, vectorSize) {
   const minFreq = Math.PI / (2 * vectorSize);
   const maxFreq = Math.PI / ((1 / 10) * vectorSize);
@@ -570,6 +582,19 @@ export function sinePhase(nVectors, vectorSize) {
       vector.push(Math.sin(freq * (x + phaseOffset)));
     }
     output.push(new Point(vector, angleColor(Math.PI * 2 * progress)));
+  }
+  return output;
+}
+
+export function sinePreview(nPoints) {
+  const amplitude = nPoints / 2;
+  const freq = Math.PI / (nPoints / 5);
+
+  const output = [];
+  for (let x = 0; x < nPoints; x++) {
+    const progress = x / nPoints;
+    const vector = [x, Math.sin(freq * x) * amplitude];
+    output.push(new Point(vector, angleColor(0)));
   }
   return output;
 }

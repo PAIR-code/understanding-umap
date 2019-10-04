@@ -38,7 +38,10 @@
     "dev:mammoth-tsne": "FIGURE=mammoth-tsne run-p dev",
     "dev:toy": "FIGURE=toy run-p dev",
     "dev:toy_comparison": "FIGURE=toy_comparison run-p dev",
-    "preprocess": "node src/scripts/compress_mammoth.js",
+    "preprocess": "preprocess:mammoth && preprocess:hyperparameters && preprocess:toy_comparison",
+    "preprocess:toy_comparison": "node -r esm src/visualizations/toy_comparison_visualization/js/preprocess.js",
+    "preprocess:hyperparameters": "node -r esm src/visualizations/hyperparameters_visualization/js/preprocess.js",
+    "preprocess:mammoth": "node -r esm scripts/compress_mammoth.js",
     "start": "sirv public --single",
     "start:dev": "sirv public --single --dev"
   }

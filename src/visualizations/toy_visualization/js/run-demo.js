@@ -2,6 +2,8 @@ import { visualize } from "./visualize";
 import { UMAP } from "umap-js";
 import { Point } from "../../../shared/js/generators";
 
+export const N_EPOCHS = 400;
+
 const timescale = d3
   .scaleLinear()
   .domain([0, 20, 50, 100, 200, 6000])
@@ -17,7 +19,7 @@ export function runDemo(points, canvas, options, stepCb) {
   // const tsne = new tsnejs.tSNE(options);
   const data = points.map(point => point.coords);
   const umap = new UMAP({
-    nEpochs: 200,
+    nEpochs: N_EPOCHS,
     ...options
   });
   umap.initializeFit(data);
