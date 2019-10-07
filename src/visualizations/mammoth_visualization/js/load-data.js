@@ -1,29 +1,5 @@
 import { decode, fromString } from "../../../shared/js/parse-binary";
 
-const times = {
-  umap: [
-    { n: 3, t: "25s" },
-    { n: 5, t: "34s" },
-    { n: 10, t: "51s" },
-    { n: 15, t: "1m2s" },
-    { n: 20, t: "1m11s" },
-    { n: 50, t: "1m56s" },
-    { n: 100, t: "2m30s" },
-    { n: 200, t: "3m22s" }
-  ],
-  tsne: [
-    { p: 5, t: "9m18s" },
-    { p: 15, t: "10m7s" },
-    { p: 30, t: "11m5s" },
-    { p: 50, t: "" },
-    { p: 100, t: "" },
-    { p: 200, t: "" },
-    { p: 500, t: "" },
-    { p: 1000, t: "" },
-    { p: 200, t: "" }
-  ]
-};
-
 function parseProjections(encodedProjections) {
   const parsedProjections = {};
   Object.keys(encodedProjections).forEach(key => {

@@ -1,6 +1,6 @@
 <script>
   import { afterUpdate, onMount } from "svelte";
-  import { getPoints, visualize } from "../../toy_visualization/js/visualize";
+  import { getPoints, visualize } from "../../../shared/js/visualize";
 
   export let points;
   export let onClick;

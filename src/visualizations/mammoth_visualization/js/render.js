@@ -9,8 +9,8 @@ export function render2d(canvas, dimensions, points, colorIndices) {
     const point = points[i];
     const [x, y] = point;
     const colorIndex = colorIndices[i];
-    ctx.fillStyle = COLORS[colorIndex];
 
+    ctx.fillStyle = COLORS[colorIndex];
     ctx.fillRect(x, y, 3, 3);
   }
 }

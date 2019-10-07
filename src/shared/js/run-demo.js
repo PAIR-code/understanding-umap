@@ -1,6 +1,6 @@
 import { visualize } from "./visualize";
 import { UMAP } from "umap-js";
-import { Point } from "../../../shared/js/generators";
+import { Point } from "./generators";
 
 export const N_EPOCHS = 400;
 

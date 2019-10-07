@@ -5,7 +5,7 @@
     visualize,
     getPoints,
     getDemoPreviewOverride
-  } from "../../toy_visualization/js/visualize";
+  } from "../../../shared/js/visualize";
   import Preview from "./Preview.svelte";
   import { UMAP } from "umap-js";
   import preprocessedDemos from "../js/preprocessed.json";

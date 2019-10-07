@@ -1,8 +1,8 @@
 <script>
   import { afterUpdate, onMount } from "svelte";
   import { allDemos as demos } from "../../../shared/js/toy-configs";
-  import { visualize, getPoints } from "../js/visualize";
-  import { runDemo, N_EPOCHS } from "../js/run-demo";
+  import { visualize, getPoints } from "../../../shared/js/visualize";
+  import { runDemo, N_EPOCHS } from "../../../shared/js/run-demo";
 
   import Preview from "./Preview.svelte";
   import Parameter from "./Parameter.svelte";
@@ -84,28 +84,28 @@
 </script>
 
 <style>
-  #playground {
+  .playground {
     overflow: hidden;
     font-family: "Open Sans", sans-serif;
     z-index: 1000;
   }
 
-  #playground * {
+  .playground * {
     box-sizing: border-box;
   }
 
   /* Playground Canvas */
-  #playground-canvas {
+  .playground-canvas {
     float: left;
     width: 55%;
   }
 
-  #playground-canvas canvas {
+  .playground-canvas canvas {
     width: 100%;
   }
 
   /* Data Menu */
-  #data-menu {
+  .data-menu {
     /*float: left;*/
     /*width: 25%*/
     width: 40%;
@@ -116,18 +116,18 @@
   }
 
   /* Data Details */
-  #data-details {
+  .data-details {
     position: relative;
   }
 
   @media (min-width: 768px) {
-    #data-details {
+    .data-details {
       width: 40%;
       float: right;
     }
   }
 
-  #data-details #data-controls {
+  .data-details .data-controls {
     width: 40%;
     float: right;
     position: relative;
@@ -136,18 +136,18 @@
   }
 
   @media (min-width: 768px) {
-    #data-details #data-controls {
+    .data-details .data-controls {
       width: 50%;
       float: left;
     }
   }
 
-  #data-details #play-controls {
-    margin-bottom: 8px;
+  .data-details .play-controls {
+    margin-bottom: 15px;
     overflow: hidden;
     position: relative;
   }
-  #data-details #play-controls button {
+  .data-details .play-controls button {
     cursor: pointer;
     outline: none;
     border-radius: 50%;
@@ -161,11 +161,11 @@
     float: left;
     position: relative;
   }
-  #data-details #play-controls button:disabled {
+  .data-details .play-controls button:disabled {
     background: lightgray;
     cursor: default;
   }
-  #play-controls i {
+  .play-controls i {
     display: block;
     position: absolute;
     top: 50%;
@@ -176,15 +176,15 @@
     line-height: 0;
   }
   @media (min-width: 768px) {
-    #play-controls i {
+    .play-controls i {
       font-size: 30px;
     }
   }
-  #play-controls #play-pause i {
+  .play-controls .play-pause i {
     position: absolute;
   }
 
-  #steps-display {
+  .steps-display {
     float: left;
     text-align: center;
     width: 25%;
@@ -193,24 +193,24 @@
   }
 
   @media (min-width: 1024px) {
-    #steps-display {
+    .steps-display {
       font-size: 16px;
       line-height: 1.6em;
     }
   }
-  #data-details #data-description {
+  .data-details .data-description {
     width: 50%;
     float: right;
     font-size: 13px;
   }
 
-  #data-description-text {
+  .data-description-text {
     min-height: 60px;
     margin-bottom: 5px;
   }
 
   @media (min-width: 768px) {
-    #data-details #data-description {
+    .data-details .data-description {
       width: 50%;
       float: left;
       margin-right: 0;
@@ -224,13 +224,13 @@
   }
 </style>
 
-<div id="playground">
+<div class="playground">
 
-  <div id="playground-canvas">
-    <canvas bind:this={canvas} id="output" width="600" height="600" />
+  <div class="playground-canvas">
+    <canvas bind:this={canvas} class="output" width="600" height="600" />
   </div>
 
-  <div id="data-menu">
+  <div class="data-menu">
     {#each demos as demo, i}
       <Preview
         {demo}
@@ -239,10 +239,10 @@
     {/each}
   </div>
 
-  <div id="data-details">
-    <div id="data-controls">
-      <div id="play-controls">
-        <button id="play-pause" on:click={playPause} disabled={isFinished}>
+  <div class="data-details">
+    <div class="data-controls">
+      <div class="play-controls">
+        <button class="play-pause" on:click={playPause} disabled={isFinished}>
           {#if isRunning}
             <i class="material-icons">pause</i>
           {:else}
@@ -250,18 +250,18 @@
           {/if}
         </button>
         <button
-          id="restart"
+          class="restart"
           on:click={restart}
           disabled={isRunning || step === 0}>
           <i class="material-icons">refresh</i>
         </button>
-        <div id="steps-display">
+        <div class="steps-display">
           Step
           <br />
-          <span id="step">{step}</span>
+          <span class="step">{step}</span>
         </div>
       </div>
-      <div id="umap-options">
+      <div class="umap-options">
         <div class="parameters-label">UMAP Parameters</div>
         <Parameter
           options={{ name: 'nNeighbors', min: nNeighborsMin, max: nNeighborsMax, step: 1 }}
@@ -273,9 +273,9 @@
           onChange={restart} />
       </div>
     </div>
-    <div id="data-description">
-      <div id="data-description-text">{demo.description}</div>
-      <div id="data-options">
+    <div class="data-description">
+      <div class="data-description-text">{demo.description}</div>
+      <div class="data-options">
         <div class="parameters-label">Dataset Parameters</div>
         {#each demo.options as demoOption (demoOption.name)}
           <Parameter

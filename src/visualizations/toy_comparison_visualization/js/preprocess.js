@@ -1,5 +1,5 @@
 import { distanceMatrix } from "../../../shared/js/toy-configs";
-import { getPoints } from "../../toy_visualization/js/visualize";
+import { getPoints } from "../../../shared/js/visualize";
 import { UMAP } from "umap-js";
 import { TSNE } from "../../../shared/js/tsne";
 import demos from "../js/demos";

@@ -5,7 +5,7 @@
     visualize,
     getPoints,
     getDemoPreviewOverride
-  } from "../../toy_visualization/js/visualize";
+  } from "../../../shared/js/visualize";
   import Preview from "./Preview.svelte";
   import { UMAP } from "umap-js";
   import preprocessedDemos from "../js/preprocessed.json";
@@ -175,7 +175,7 @@
   }
 
   .demo-description {
-    width: 400px;
+    width: 700px;
     padding: 4px;
     display: flex;
     flex-direction: column;
@@ -243,8 +243,8 @@
       <div class="demo-text">{selectedDemo.description}</div>
       {#each selectedDemo.options as option}
         <div class="demo-parameters">
-          <div class="demo-parameter-name">{option.name}:</div>
-          <div>{option.start}</div>
+          <span class="demo-parameter-name">{option.name}:</span>
+          <span>{option.start}</span>
         </div>
       {/each}
     </div>

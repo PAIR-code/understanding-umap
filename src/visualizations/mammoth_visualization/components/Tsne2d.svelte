@@ -4,6 +4,7 @@
   import { TSNE_MAMMOTH_PERPLEXITIES } from "../../../shared/js/parameters";
   import Projection2d from "./Projection2D.svelte";
 
+  const sliderWidth = 230;
   // prettier-ignore
   const perplexities = [...TSNE_MAMMOTH_PERPLEXITIES];
 
@@ -14,6 +15,7 @@
   export let colorIndices;
   export let projections;
   export let title = "";
+  export let times = null;
 
   const getKey = () => `p=${perplexity}`;
   const getCurrentProjection = () => projections[getKey()];
@@ -41,6 +43,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-top: 6px;
   }
 
   .title {
@@ -52,7 +55,11 @@
 
   label {
     margin-right: 10px;
-    width: 200px;
+    width: 150px;
+  }
+
+  .label-text {
+    font-weight: 600;
   }
 </style>
 
@@ -62,11 +69,25 @@
   {/if}
   <Projection2d {projection} {colorIndices} />
   <div class="controls">
-    <label class="label">perplexity: {perplexity}</label>
-    <Slider
-      min={0}
-      max={perplexities.length - 1}
-      step={1}
-      bind:value={perplexityIndex} />
+    <label class="label">
+      <span class="label-text">perplexity:</span>
+      {perplexity}
+    </label>
+    <div style="width: {sliderWidth}px">
+      <Slider
+        min={0}
+        max={perplexities.length - 1}
+        step={1}
+        bind:value={perplexityIndex} />
+    </div>
   </div>
+  {#if times}
+    <div class="controls">
+      <label class="label">
+        <span class="label-text">time:</span>
+        {times[perplexityIndex].t}
+      </label>
+      <div style="width: {sliderWidth}px" />
+    </div>
+  {/if}
 </div>

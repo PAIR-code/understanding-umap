@@ -1,5 +1,5 @@
 import { allDemos as demos } from "../../../shared/js/toy-configs";
-import { getPoints } from "../../toy_visualization/js/visualize";
+import { getPoints } from "../../../shared/js/visualize";
 import { UMAP } from "umap-js";
 import fs from "fs";
 import path from "path";

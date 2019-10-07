@@ -4,6 +4,7 @@
   import Tsne2d from "./Tsne2d.svelte";
   import Umap2d from "./Umap2d.svelte";
   import Projection3d from "./Projection3d.svelte";
+  import { times } from "../js/times";
 
   let isLoaded = false;
   let colorIndices;
@@ -34,11 +35,13 @@
     <Tsne2d
       {colorIndices}
       projections={tsneProjections}
-      title={'2D t-SNE projection'} />
+      title={'2D t-SNE projection'}
+      times={times.tsne} />
     <Umap2d
       {colorIndices}
       projections={umapProjections}
-      title={'2D UMAP projection'} />
+      title={'2D UMAP projection'}
+      times={times.umap} />
   {:else}
     <p>loading...</p>
   {/if}

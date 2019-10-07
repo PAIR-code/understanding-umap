@@ -12,14 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+const pointsCache = new Map();
 export function getPoints(demo, params) {
   if (!params) {
     params = demo.options.map(option => option.start);
   }
 
   return demo.generator.apply(null, params);
+
+  if (pointsCache.has(demo.name)) {
+    return pointsCache.get(demo.name);
+  } else {
+    const points = demo.generator.apply(null, params);
+    pointsCache.set(demo.name, points);
+    return points;
+  }
 }
 
+const overrideCache = new Map();
 export function getDemoPreviewOverride(demo, params) {
   if (!params) {
     params = demo.options.map(option => option.start);
@@ -27,6 +37,17 @@ export function getDemoPreviewOverride(demo, params) {
 
   if (demo.previewOverride) {
     return demo.previewOverride.apply(null, params);
+  }
+  return null;
+
+  if (demo.previewOverride) {
+    if (overrideCache.has(demo.name)) {
+      return overrideCache.get(demo.name);
+    } else {
+      const points = demo.previewOverride.apply(null, params);
+      overrideCache.set(demo.name, points);
+      return points;
+    }
   }
   return null;
 }

@@ -1,6 +1,10 @@
 <script>
   import { onMount } from "svelte";
-  import { getPoints, visualize } from "../js/visualize";
+  import {
+    getPoints,
+    getDemoPreviewOverride,
+    visualize
+  } from "../../../shared/js/visualize";
 
   export let demo;
   export let onClick;
@@ -8,7 +12,9 @@
 
   let canvas;
 
-  const points = getPoints(demo);
+  const points = demo.previewOverride
+    ? getDemoPreviewOverride(demo)
+    : getPoints(demo);
 
   onMount(() => {
     visualize(points, canvas, null, null);
@@ -59,9 +65,6 @@
     left: 0;
     box-sizing: border-box;
     border-radius: 4px;
-  }
-  .demo-data span {
-    display: none;
   }
   .demo-data:hover canvas {
     opacity: 1;
