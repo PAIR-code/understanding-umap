@@ -14,6 +14,8 @@ if (figure === "cech") {
   input = "src/visualizations/cech_visualization/main.js";
 } else if (figure === "fmnist") {
   input = "src/visualizations/fmnist_visualization/main.js";
+} else if (figure === "distancefn") {
+  input = "src/visualizations/distancefn_visualization/main.js";
 } else if (figure === "hyperparameters") {
   input = "src/visualizations/hyperparameters_visualization/main.js";
 } else if (figure === "mammoth-umap") {

@@ -23,7 +23,7 @@
     margin: 20px 0;
     font-style: italic;
     width: 80%;
-    font-size: 12px;
+    font-size: 13px;
   }
 </style>
 

@@ -27,11 +27,12 @@
     "umap-js": "^1.3.1"
   },
   "scripts": {
-    "build": "rollup -c",
-    "autobuild": "rollup -c -w",
+    "build": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c",
+    "autobuild": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c -w",
     "deploy": "yarn build && node deploy.js",
     "dev": "run-p start:dev autobuild",
     "dev:cech": "FIGURE=cech run-p dev",
+    "dev:distancefn": "FIGURE=distancefn run-p dev",
     "dev:fmnist": "FIGURE=fmnist run-p dev",
     "dev:hyperparameters": "FIGURE=hyperparameters run-p dev",
     "dev:mammoth-umap": "FIGURE=mammoth-umap run-p dev",
@@ -39,6 +40,7 @@
     "dev:toy": "FIGURE=toy run-p dev",
     "dev:toy_comparison": "FIGURE=toy_comparison run-p dev",
     "preprocess": "preprocess:mammoth && preprocess:hyperparameters && preprocess:toy_comparison",
+    "preprocess:distancefn": "node -r esm src/visualizations/distancefn_visualization/js/preprocess.js",
     "preprocess:toy_comparison": "node -r esm src/visualizations/toy_comparison_visualization/js/preprocess.js",
     "preprocess:hyperparameters": "node -r esm src/visualizations/hyperparameters_visualization/js/preprocess.js",
     "preprocess:mammoth": "node -r esm scripts/compress_mammoth.js",

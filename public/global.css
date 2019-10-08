@@ -66,6 +66,10 @@ code {
   border-radius: 3px;
 }
 
+.figure-number {
+  font-weight: 600;
+}
+
 button {
   color: #333;
   background-color: #f4f4f4;

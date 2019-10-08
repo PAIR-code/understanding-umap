@@ -1,4 +1,4 @@
-import { allDemos as demos } from "../../../shared/js/toy-configs";
+import demos from "../../toy_comparison_visualization/js/demos";
 import { getPoints } from "../../../shared/js/visualize";
 import { UMAP } from "umap-js";
 import fs from "fs";
@@ -13,7 +13,7 @@ demos.forEach(demo => {
   }
 });
 
-const nNeighborsOptions = [5, 10, 15, 20, 30];
+const nNeighborsOptions = [5, 15, 30, 50, 100];
 const minDistOptions = [0, 0.01, 0.05, 0.1, 0.5, 1.0];
 
 const output = [];

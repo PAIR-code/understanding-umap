@@ -1,6 +1,6 @@
 <script>
   import { afterUpdate, onMount } from "svelte";
-  import { allDemos as demos } from "../../../shared/js/toy-configs";
+  import demos from "../../toy_comparison_visualization/js/demos";
   import {
     visualize,
     getPoints,
@@ -16,7 +16,7 @@
   let demoPoints = getPoints(selectedDemo);
   let entries;
 
-  const nNeighborsOptions = [5, 10, 15, 20, 30];
+  const nNeighborsOptions = [5, 15, 30, 50, 100];
   const minDistOptions = [0, 0.01, 0.05, 0.1, 0.5, 1.0];
 
   const projections = [];
