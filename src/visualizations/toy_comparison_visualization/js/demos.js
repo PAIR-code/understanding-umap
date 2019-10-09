@@ -3,7 +3,7 @@ import {
   extendedDemos
 } from "../../../shared/js/toy-configs";
 
-export const optionsOverrides = [
+export const originalOverrides = [
   {
     name: "Grid",
     options: [{ name: "Points Per Side", start: 20 }],
@@ -104,7 +104,10 @@ export const optionsOverrides = [
       { name: "Number Of Points", start: 200 },
       { name: "Dimensions", start: 10 }
     ]
-  },
+  }
+];
+
+const extendedOverrides = [
   {
     name: "Star",
     options: [
@@ -153,7 +156,9 @@ export const optionsOverrides = [
   }
 ];
 
-const allDemos = [...originalDemos, ...extendedDemos].map((demo, i) => {
+const optionsOverrides = [...extendedOverrides, ...originalOverrides];
+
+const allDemos = [...extendedDemos, ...originalDemos].map((demo, i) => {
   const modified = JSON.parse(JSON.stringify(demo)); // Simple clone
   modified.generator = demo.generator;
   modified.previewOverride = demo.previewOverride;

@@ -434,12 +434,13 @@ export function star(n, nArms, dim) {
   const points = [];
   const pointsPerArm = Math.floor(n / nArms);
   for (let i = 0; i < nArms; i++) {
+    const color = angleColor((Math.PI * 2 * i) / nArms);
     const armVector = normalVector(dim);
     for (let i = 0; i < pointsPerArm; i++) {
       const percent = i / pointsPerArm;
       const noise = 0.01;
       const p = addNoise(multiplyScalar(armVector, percent), noise);
-      points.push(new Point(p));
+      points.push(new Point(p, color));
     }
   }
   return points;
@@ -456,12 +457,13 @@ export function linkedClusters(nClusters, perCluster, perLink, dim) {
   const points = [];
   const centroids = [];
   for (let i = 0; i < nClusters; i++) {
+    const color = angleColor((Math.PI * 2 * i) / nClusters);
     const centroid = normalVector(dim);
     centroids.push(centroid);
 
     for (let i = 0; i < perCluster; i++) {
       const p = addNoise(centroid, 0.2);
-      points.push(p);
+      points.push(new Point(p, color));
     }
 
     if (i > 0) {
@@ -469,11 +471,11 @@ export function linkedClusters(nClusters, perCluster, perLink, dim) {
       for (let i = 0; i < perLink; i++) {
         const percent = i / perLink;
         const p = interpolate(centroid, lastCentroid, percent);
-        points.push(addNoise(p, 0.01));
+        points.push(new Point(addNoise(p, 0.01), "darkgray"));
       }
     }
   }
-  return points.map(p => new Point(p));
+  return points;
 }
 
 function drawLine(ctx, angle, nPixels) {

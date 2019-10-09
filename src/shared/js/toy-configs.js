@@ -467,7 +467,7 @@ export const extendedDemos = [
   }
 ];
 
-export const allDemos = [...demos, ...extendedDemos];
+export const allDemos = [...extendedDemos, ...demos];
 
 // Euclidean distance.
 function dist(a, b) {
