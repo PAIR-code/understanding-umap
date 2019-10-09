@@ -17,7 +17,7 @@ function process(compressed) {
 
             const encoded = dict[key];
             const { data, length, nDimensions, ranges } = encoded;
-            const byteArray = fromString(data);
+            const byteArray = fromString(atob(data));
             const decoded = decode(
               byteArray,
               nDimensions * length,

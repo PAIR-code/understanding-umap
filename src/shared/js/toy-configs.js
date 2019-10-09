@@ -1,5 +1,160 @@
 import * as generators from "./generators";
 
+export const extendedDemos = [
+  {
+    name: "Star",
+    description: "Points arranged in a radial star pattern",
+    options: [
+      {
+        name: "Number of points",
+        min: 10,
+        max: 300,
+        start: 100
+      },
+      {
+        name: "Number of arms",
+        min: 3,
+        max: 20,
+        start: 5
+      },
+      {
+        name: "Dimensions",
+        min: 3,
+        max: 50,
+        start: 10
+      }
+    ],
+    generator: generators.star
+  },
+  {
+    name: "Linked Clusters",
+    description: "Clusters linked with a chain of points",
+    options: [
+      {
+        name: "Number of clusters",
+        min: 3,
+        max: 20,
+        start: 6
+      },
+      {
+        name: "Points per cluster",
+        min: 10,
+        max: 100,
+        start: 30
+      },
+      {
+        name: "Points per link",
+        min: 5,
+        max: 100,
+        start: 15
+      },
+      {
+        name: "Dimensions",
+        min: 3,
+        max: 100,
+        start: 10
+      }
+    ],
+    generator: generators.linkedClusters
+  },
+  {
+    name: "Rotated lines",
+    description:
+      "nxn images of a line rotated smoothly around the center, converted to a n*n dimensional vector.",
+    options: [
+      {
+        name: "Number of lines",
+        min: 10,
+        max: 200,
+        start: 50
+      },
+      {
+        name: "Pixels per side",
+        min: 5,
+        max: 28,
+        start: 10
+      }
+    ],
+    generator: generators.continuousLineImages,
+    previewOverride: generators.linePreview
+  },
+  {
+    name: "Rotated lines, clustered",
+    description:
+      "nxn images of a line rotated around the center, converted to a n*n dimensional vector. Grouped into clusters of similar angles.",
+    options: [
+      {
+        name: "Number of lines",
+        min: 10,
+        max: 200,
+        start: 50
+      },
+      {
+        name: "Number of clusters",
+        min: 3,
+        max: 12,
+        start: 5
+      },
+      {
+        name: "Noise",
+        min: 0,
+        max: 100,
+        start: 8
+      },
+      {
+        name: "Pixels per side",
+        min: 5,
+        max: 28,
+        start: 10
+      }
+    ],
+    generator: generators.clusteredLineImages,
+    previewOverride: generators.linePreview
+  },
+  {
+    name: "Sine frequency",
+    description:
+      "Vectors of a sine wave parameterized by frequency. Hue corresponds to frequency.",
+    options: [
+      {
+        name: "Number of vectors",
+        min: 10,
+        max: 200,
+        start: 50
+      },
+      {
+        name: "Vector size",
+        min: 3,
+        max: 300,
+        start: 100
+      }
+    ],
+    generator: generators.sineFrequency,
+    previewOverride: generators.sinePreview
+  },
+  {
+    name: "Sine phase",
+    description:
+      "Vectors of a sine wave parameterized by phase. Hue corresponds to phase.",
+    options: [
+      {
+        name: "Number of vectors",
+        min: 10,
+        max: 200,
+        start: 50
+      },
+      {
+        name: "Vector size",
+        min: 3,
+        max: 300,
+        start: 100
+      }
+    ],
+    generator: generators.sinePhase,
+    previewOverride: generators.sinePreview
+  }
+];
+
 export const demos = [
   {
     name: "Grid",
@@ -318,156 +473,7 @@ export const demos = [
   }
 ];
 
-export const extendedDemos = [
-  {
-    name: "Star",
-    description: "Points arranged in a radial star pattern",
-    options: [
-      {
-        name: "Number of points",
-        min: 10,
-        max: 300,
-        start: 100
-      },
-      {
-        name: "Number of arms",
-        min: 3,
-        max: 20,
-        start: 5
-      },
-      {
-        name: "Dimensions",
-        min: 3,
-        max: 50,
-        start: 10
-      }
-    ],
-    generator: generators.star
-  },
-  {
-    name: "Linked Clusters",
-    description: "Clusters linked with a chain of points",
-    options: [
-      {
-        name: "Number of clusters",
-        min: 3,
-        max: 20,
-        start: 6
-      },
-      {
-        name: "Points per cluster",
-        min: 10,
-        max: 100,
-        start: 30
-      },
-      {
-        name: "Points per link",
-        min: 5,
-        max: 100,
-        start: 15
-      },
-      {
-        name: "Dimensions",
-        min: 3,
-        max: 100,
-        start: 10
-      }
-    ],
-    generator: generators.linkedClusters
-  },
-  {
-    name: "Rotated lines",
-    description:
-      "An nxn image of a line rotated smoothly around the center, converted to a n*n dimensional vector.",
-    options: [
-      {
-        name: "Number of lines",
-        min: 10,
-        max: 200,
-        start: 50
-      },
-      {
-        name: "Pixels per side",
-        min: 5,
-        max: 28,
-        start: 10
-      }
-    ],
-    generator: generators.continuousLineImages,
-    previewOverride: generators.linePreview
-  },
-  {
-    name: "Rotated lines, clustered",
-    description:
-      "An nxn image of a line rotated around the center, converted to a n*n dimensional vector. Grouped into clusters of similar angles.",
-    options: [
-      {
-        name: "Number of lines",
-        min: 10,
-        max: 200,
-        start: 50
-      },
-      {
-        name: "Number of clusters",
-        min: 3,
-        max: 12,
-        start: 5
-      },
-      {
-        name: "Pixels per side",
-        min: 5,
-        max: 28,
-        start: 10
-      }
-    ],
-    generator: generators.clusteredLineImages,
-    previewOverride: generators.linePreview
-  },
-  {
-    name: "Sine frequency",
-    description:
-      "A vector of a sine wave parameterized by frequency. Hue corresponds to frequency.",
-    options: [
-      {
-        name: "Number of vectors",
-        min: 10,
-        max: 200,
-        start: 50
-      },
-      {
-        name: "Vector size",
-        min: 3,
-        max: 300,
-        start: 100
-      }
-    ],
-    generator: generators.sineFrequency,
-    previewOverride: generators.sinePreview
-  },
-  {
-    name: "Sine phase",
-    description:
-      "A vector of a sine wave parameterized by phase. Hue corresponds to phase.",
-    options: [
-      {
-        name: "Number of vectors",
-        min: 10,
-        max: 200,
-        start: 50
-      },
-      {
-        name: "Vector size",
-        min: 3,
-        max: 300,
-        start: 100
-      }
-    ],
-    generator: generators.sinePhase,
-    previewOverride: generators.sinePreview
-  }
-];
-
-export const allDemos = [...demos, ...extendedDemos];
+export const allDemos = [...extendedDemos, ...demos];
 
 // Euclidean distance.
 function dist(a, b) {

@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const _ = require("lodash");
+const btoa = require("btoa");
 
 const PUBLIC_DIR = "../public/";
 
@@ -64,7 +65,7 @@ hyperparametersData.forEach((entry, index) => {
     );
     const flattened = _.flatten(normalized);
     const encoded = encode(flattened, N_BITS_HYPERPARAMETERS);
-    const data = toString(encoded);
+    const data = btoa(toString(encoded));
 
     encodedHyperparameters[index][key] = {
       data,
@@ -92,7 +93,7 @@ toyComparisonData.forEach((entry, index) => {
       );
       const flattened = _.flatten(normalized);
       const encoded = encode(flattened, N_BITS_TOY_COMPARISON);
-      const data = toString(encoded);
+      const data = btoa(toString(encoded));
 
       encodedToyComparison[index][umapOrTsne][key] = {
         data,
