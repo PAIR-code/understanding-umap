@@ -26,7 +26,7 @@ Dimensionality reduction is a powerful tool for machine learning practitioners t
 <Figure>
   <ToyVisualization />
   <span slot="caption">
-    <span class="figure-number">Fig. 1:</span> Apply UMAP projection to various toy datasets.
+    <span class="figure-number">Figure 1: </span>Apply UMAP projection to various toy datasets.
   </span>
 </Figure>
 
@@ -39,7 +39,7 @@ Before diving into the theory behind UMAP, let's take a look at how it performs 
 <Figure>
   <FmnistVisualization />
   <span slot="caption">
-    <span class="figure-number">Fig. 2:</span> Dimensionality reduction applied to the Fashion MNIST dataset. 28x28 images of clothing items in 10 categories are encoded as 784-dimensional vectors and then projected to 3 using UMAP and t-SNE.
+    <span class="figure-number">Figure 2: </span>Dimensionality reduction applied to the Fashion MNIST dataset. 28x28 images of clothing items in 10 categories are encoded as 784-dimensional vectors and then projected to 3 using UMAP and t-SNE.
   </span>
 </Figure>
 
@@ -54,7 +54,7 @@ In order to construct the initial high-dimensional graph, UMAP builds something 
 <Figure>
   <CechVisualization />
   <span slot="caption">
-    Adjust the slider to extend a radius outwards from each point, computed by the distance to its nth nearest neighbor. Notice that past the intersection with the first neighbor, the radius begins to get fuzzy, with subsequent connections appearing with less weight;
+    <span class="figure-number">Figure 3: </span>Adjust the slider to extend a radius outwards from each point, computed by the distance to its nth nearest neighbor. Notice that past the intersection with the first neighbor, the radius begins to get fuzzy, with subsequent connections appearing with less weight;
   </span>
 </Figure>
 
@@ -69,6 +69,7 @@ By understanding the theory behind UMAP, it becomes much easier to understand th
 <Figure>
   <HyperparametersVisualization />
   <span slot="caption">
+    <span class="figure-number">Figure 4: </span>
     UMAP projection of various toy datasets with a variety of common values for the <code>n_neighbors</code> and <code>min_dist</code> parameters.
   </span>
 </Figure>
@@ -82,6 +83,7 @@ The following visualization - extended from excellent work by [Max Noichl](https
 <Figure>
   <MammothUmapVisualization />
   <span slot="caption">
+    <span class="figure-number">Figure 5: </span>
     UMAP projections of a 3D woolly mammoth skeleton (50,000 points) into 2 dimensions, with various settings for the `n_neighbors` and `min_dist` parameters.
   </span>
 </Figure>
@@ -95,6 +97,7 @@ The biggest difference between the the output of UMAP when compared with t-SNE i
 <Figure>
   <MammothTsneVisualization />
   <span slot="caption">
+    <span class="figure-number">Figure 6: </span>
     A comparison between UMAP and t-SNE projections of a 3D woolly mammoth skeleton (50,000 points) into 2 dimensions, with various settings for parameters. Notice how much more global structure is preserved with UMAP, particularly with larger values of nNeighbors.
   </span>
 </Figure>
@@ -104,6 +107,7 @@ Going back to the 3D mammoth example, we can easily see striking differences bet
 <Figure>
   <ToyComparisonVisualization />
   <span slot="caption">
+    <span class="figure-number">Figure 7: </span>
     Comparison between UMAP and t-SNE projecting various toy datasets.
   </span>
 </Figure>

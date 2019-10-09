@@ -1,5 +1,5 @@
 <script>
-  import { onMount, forceUpdate } from "svelte";
+  import { onMount } from "svelte";
   import { loadData } from "../js/load-data";
   import Color from "color";
 

@@ -79,8 +79,5 @@ export default {
     // instead of npm run dev), minify
     production && terser(),
     visualizer()
-  ],
-  watch: {
-    clearScreen: false
-  }
+  ]
 };
