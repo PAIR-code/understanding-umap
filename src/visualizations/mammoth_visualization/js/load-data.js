@@ -5,7 +5,7 @@ function parseProjections(encodedProjections) {
   const parsedProjections = {};
   Object.keys(encodedProjections).forEach(key => {
     const encoded = encodedProjections[key];
-    const byteArray = fromString(encoded);
+    const byteArray = fromString(atob(encoded));
     const decoded = decode(byteArray, 20000, N_BITS_MAMMOTH);
     const unzipped = [];
     for (let i = 0; i < decoded.length; i += 2) {

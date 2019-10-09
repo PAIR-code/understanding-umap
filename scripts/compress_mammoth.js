@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const btoa = require("btoa");
 
 const PUBLIC_DIR = "../public/";
 
@@ -37,7 +38,7 @@ Object.keys(mammothData.projections).forEach(key => {
   });
 
   const encoded = encode(output, N_BITS_MAMMOTH);
-  encodedUMAP[key] = toString(encoded);
+  encodedUMAP[key] = btoa(toString(encoded));
 });
 
 // Sort the 3D points as well
@@ -60,7 +61,7 @@ TSNE_MAMMOTH_PERPLEXITIES.forEach(p => {
   });
 
   const encoded = encode(output, N_BITS_MAMMOTH);
-  encodedTSNE[key] = toString(encoded);
+  encodedTSNE[key] = btoa(toString(encoded));
 });
 
 const labelOffsets = Object.keys(labelCounts)

@@ -520,7 +520,12 @@ export function continuousLineImages(nLines, nPixels = 28) {
   return output;
 }
 
-export function clusteredLineImages(nLines, nClusters, nPixels = 28) {
+export function clusteredLineImages(
+  nLines,
+  nClusters,
+  noiseParam = 25,
+  nPixels = 28
+) {
   const canvas = createCanvas(nPixels, nPixels);
   const ctx = canvas.getContext("2d");
 
@@ -531,7 +536,7 @@ export function clusteredLineImages(nLines, nClusters, nPixels = 28) {
     const progress = i / nClusters;
 
     for (let j = 0; j < linesPerCluster; j++) {
-      const noise = Math.random() * 0.25;
+      const noise = Math.random() * (noiseParam / 100) * Math.PI;
       const angle = Math.PI * progress + noise;
       const pixelData = drawLine(ctx, angle, nPixels);
       output.push(new Point(pixelData, angleColor(angle * 2)));

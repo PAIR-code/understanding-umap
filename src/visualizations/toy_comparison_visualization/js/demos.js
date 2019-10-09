@@ -137,6 +137,7 @@ const extendedOverrides = [
     options: [
       { name: "Number of lines", start: 200 },
       { name: "Number of clusters", start: 10 },
+      { name: "Noise", start: 8 },
       { name: "Pixels per side", start: 28 }
     ]
   },
