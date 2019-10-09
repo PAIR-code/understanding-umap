@@ -4,7 +4,10 @@ const path = require("path");
 const PUBLIC_DIR = "../public/";
 
 const { encode, toString } = require("../src/shared/js/parse-binary");
-const { TSNE_MAMMOTH_PERPLEXITIES } = require("../src/shared/js/parameters");
+const {
+  TSNE_MAMMOTH_PERPLEXITIES,
+  N_BITS_MAMMOTH
+} = require("../src/shared/js/parameters");
 const mammothData = require("../raw_data/mammoth_umap.json");
 const mammothTSNE = require("../raw_data/mammoth_tsne.json");
 const mammoth3d = mammothData["3d"];
@@ -33,7 +36,7 @@ Object.keys(mammothData.projections).forEach(key => {
     output.push(point[0], point[1]);
   });
 
-  const encoded = encode(output, 10);
+  const encoded = encode(output, N_BITS_MAMMOTH);
   encodedUMAP[key] = toString(encoded);
 });
 
@@ -56,7 +59,7 @@ TSNE_MAMMOTH_PERPLEXITIES.forEach(p => {
     output.push(point[0], point[1]);
   });
 
-  const encoded = encode(output, 10);
+  const encoded = encode(output, N_BITS_MAMMOTH);
   encodedTSNE[key] = toString(encoded);
 });
 

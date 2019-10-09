@@ -5,6 +5,7 @@ import json from "rollup-plugin-json";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
 import { mdsvex } from "mdsvex";
+import visualizer from "rollup-plugin-visualizer";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -29,12 +30,18 @@ if (figure === "cech") {
 }
 
 export default {
+  external: ["d3", "scatter-gl", "three"],
   input,
   output: {
     sourcemap: true,
     format: "iife",
     name: "app",
-    file: "public/bundle.js"
+    file: "public/bundle.js",
+    globals: {
+      d3: "d3",
+      three: "THREE",
+      "scatter-gl": "ScatterGL"
+    }
   },
   plugins: [
     svelte({
@@ -70,7 +77,8 @@ export default {
 
     // If we're building for production (npm run build
     // instead of npm run dev), minify
-    production && terser()
+    production && terser(),
+    visualizer()
   ],
   watch: {
     clearScreen: false

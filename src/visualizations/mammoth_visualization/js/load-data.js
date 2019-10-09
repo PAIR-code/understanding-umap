@@ -1,11 +1,12 @@
 import { decode, fromString } from "../../../shared/js/parse-binary";
+import { N_BITS_MAMMOTH } from "../../../shared/js/parameters";
 
 function parseProjections(encodedProjections) {
   const parsedProjections = {};
   Object.keys(encodedProjections).forEach(key => {
     const encoded = encodedProjections[key];
     const byteArray = fromString(encoded);
-    const decoded = decode(byteArray, 20000, 10);
+    const decoded = decode(byteArray, 20000, N_BITS_MAMMOTH);
     const unzipped = [];
     for (let i = 0; i < decoded.length; i += 2) {
       unzipped.push([decoded[i], decoded[i + 1]]);

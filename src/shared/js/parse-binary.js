@@ -16,15 +16,6 @@ class BitArray {
   toggle(n) {
     this.backingArray[(n / 32) | 0] ^= 1 << n % 32;
   }
-  forEach(callback) {
-    this.backingArray.forEach((number, container) => {
-      const max =
-        container == this.backingArray.length - 1 ? this.length % 32 : 32;
-      for (let x = 0; x < max; x++) {
-        callback((number & (1 << x)) !== 0, 32 * container + x);
-      }
-    });
-  }
 }
 
 module.exports.encode = function encode(numbers, nBits) {
@@ -64,17 +55,15 @@ module.exports.decode = function(byteArray, count, nBits) {
     }
   }
 
-  let number = 0;
   const parsed = [];
-  parseBitArray.forEach((bit, index) => {
-    const bitIndex = index % nBits;
-    if (bitIndex === 0 && index !== 0) {
-      parsed.push(number);
-      number = 0;
+  for (let index = 0; index < count; index++) {
+    let number = 0;
+    for (let bitIndex = 0; bitIndex < nBits; bitIndex++) {
+      const absBitIndex = index * nBits + bitIndex;
+      if (parseBitArray.get(absBitIndex)) number += 2 ** bitIndex;
     }
-    number += bit ? 2 ** bitIndex : 0;
-  });
-  parsed.push(number);
+    parsed.push(number);
+  }
   return parsed;
 };
 

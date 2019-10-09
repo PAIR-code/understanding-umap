@@ -1,7 +1,6 @@
 <script>
   import { onMount, forceUpdate } from "svelte";
   import { loadData } from "../js/load-data";
-  import { ScatterGL } from "scatter-gl";
   import Color from "color";
 
   let umapContainer;

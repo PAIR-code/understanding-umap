@@ -11,7 +11,6 @@
     justify-content: center;
     align-items: center;
     margin-top: 18px;
-    padding: 18px 0 0 0;
   }
 
   .figure-container {

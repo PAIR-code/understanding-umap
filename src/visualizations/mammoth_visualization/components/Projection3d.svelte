@@ -2,7 +2,6 @@
   import { onMount } from "svelte";
   import { loadData } from "../js/load-data";
   import { COLORS } from "../js/colors";
-  import { ScatterGL } from "scatter-gl";
 
   let container;
   let scatterGL;

@@ -1,5 +1,6 @@
 <script>
   import { afterUpdate, onMount } from "svelte";
+  import { loadData } from "../js/load-data";
   import demos from "../../toy_comparison_visualization/js/demos";
   import {
     visualize,
@@ -8,8 +9,9 @@
   } from "../../../shared/js/visualize";
   import Preview from "./Preview.svelte";
   import { UMAP } from "umap-js";
-  import preprocessedDemos from "../js/preprocessed.json";
 
+  let isLoaded = false;
+  let preprocessedDemos;
   let selectedDemoIndex = 0;
   let points = [];
   let selectedDemo = demos[selectedDemoIndex];
@@ -38,6 +40,7 @@
 
     const nextEntries = makeBlankEntries();
     const preprocessed = preprocessedDemos[selectedDemoIndex];
+
     for (let key in preprocessed) {
       const nNeighbors = key.replace("nNeighbors=", "").split(",")[0] * 1;
       const minDist = key.replace("minDist=", "").split(",")[1] * 1;
@@ -45,7 +48,10 @@
       const col = minDistOptions.indexOf(minDist);
       const entry = preprocessed[key];
       nextEntries[row][col] = entry.map(([x, y], i) => {
-        return { coords: [x, y], color: demoPoints[i].color };
+        return {
+          coords: [x, y],
+          color: demoPoints[i].color
+        };
       });
     }
     entries = nextEntries;
@@ -65,9 +71,11 @@
     setSelectedDemo(i);
   };
 
-  setSelectedDemo(0);
-
-  afterUpdate(() => {});
+  onMount(async () => {
+    preprocessedDemos = await loadData();
+    setSelectedDemo(0);
+    isLoaded = true;
+  });
 </script>
 
 <style>
@@ -201,66 +209,70 @@
 </style>
 
 <div class="container">
-  <div class="figures-container">
-    <div class="left-column">
-      <div class="left-column-spacer" />
-      <div class="left-column-content">
-        <div class="left-column-header">
-          <div class="n-neighbors-header">n_neighbors</div>
+  {#if isLoaded}
+    <div class="figures-container">
+      <div class="left-column">
+        <div class="left-column-spacer" />
+        <div class="left-column-content">
+          <div class="left-column-header">
+            <div class="n-neighbors-header">n_neighbors</div>
+          </div>
+          <div class="left-column-labels">
+            {#each nNeighborsOptions as nNeighbors}
+              <div>{nNeighbors}</div>
+            {/each}
+          </div>
         </div>
-        <div class="left-column-labels">
-          {#each nNeighborsOptions as nNeighbors}
-            <div>{nNeighbors}</div>
-          {/each}
+      </div>
+      <div class="right-column">
+        <div class="rows-container">
+          <div class="min-dist-header">min_dist</div>
+          <div class="min-dist-labels">
+            {#each minDistOptions as minDist}
+              <div>{minDist}</div>
+            {/each}
+          </div>
+          <div class="rows">
+            {#each entries as row, rowIndex}
+              <div class="row">
+                {#each row as points}
+                  <Preview
+                    {points}
+                    onClick={() => {}}
+                    highlighted={true}
+                    selectable={false}
+                    selected={false} />
+                {/each}
+              </div>
+            {/each}
+          </div>
         </div>
       </div>
     </div>
-    <div class="right-column">
-      <div class="rows-container">
-        <div class="min-dist-header">min_dist</div>
-        <div class="min-dist-labels">
-          {#each minDistOptions as minDist}
-            <div>{minDist}</div>
-          {/each}
-        </div>
-        <div class="rows">
-          {#each entries as row, rowIndex}
-            <div class="row">
-              {#each row as points}
-                <Preview
-                  {points}
-                  onClick={() => {}}
-                  highlighted={true}
-                  selectable={false}
-                  selected={false} />
-              {/each}
-            </div>
-          {/each}
-        </div>
+    <div class="menu">
+      <div class="demo-select">
+        {#each groupDemos(6) as group, groupIndex}
+          <div class="demos">
+            {#each group as demo, i}
+              <Preview
+                points={demo.previewOverride ? getDemoPreviewOverride(demo) : getPoints(demo)}
+                onClick={handlePreviewClick(groupIndex * 6 + i)}
+                selected={groupIndex * 6 + i === selectedDemoIndex} />
+            {/each}
+          </div>
+        {/each}
+      </div>
+      <div class="demo-description">
+        <div class="demo-text">{selectedDemo.description}</div>
+        {#each selectedDemo.options as option}
+          <div class="demo-parameters">
+            <span class="demo-parameter-name">{option.name}:</span>
+            <span>{option.start}</span>
+          </div>
+        {/each}
       </div>
     </div>
-  </div>
-  <div class="menu">
-    <div class="demo-select">
-      {#each groupDemos(6) as group, groupIndex}
-        <div class="demos">
-          {#each group as demo, i}
-            <Preview
-              points={demo.previewOverride ? getDemoPreviewOverride(demo) : getPoints(demo)}
-              onClick={handlePreviewClick(groupIndex * 6 + i)}
-              selected={groupIndex * 6 + i === selectedDemoIndex} />
-          {/each}
-        </div>
-      {/each}
-    </div>
-    <div class="demo-description">
-      <div class="demo-text">{selectedDemo.description}</div>
-      {#each selectedDemo.options as option}
-        <div class="demo-parameters">
-          <span class="demo-parameter-name">{option.name}:</span>
-          <span>{option.start}</span>
-        </div>
-      {/each}
-    </div>
-  </div>
+  {:else}
+    <div>Loading...</div>
+  {/if}
 </div>
