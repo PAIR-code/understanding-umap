@@ -60,7 +60,7 @@ export const extendedDemos = [
   {
     name: "Rotated lines",
     description:
-      "nxn images of a line rotated smoothly around the center, converted to a n*n dimensional vector.",
+      "nxn images of a line rotated smoothly around the center, represented as an n*n dimensional vector.",
     options: [
       {
         name: "Number of lines",
@@ -81,7 +81,7 @@ export const extendedDemos = [
   {
     name: "Rotated lines, clustered",
     description:
-      "nxn images of a line rotated around the center, converted to a n*n dimensional vector. Grouped into clusters of similar angles.",
+      "nxn images of a line rotated around the center, represented as an n*n dimensional vector. Grouped by similar angles.",
     options: [
       {
         name: "Number of lines",
