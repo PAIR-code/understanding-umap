@@ -59,6 +59,7 @@ input[type="range"] {
 
 code {
   font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-style: normal;
   padding: 0.2em 0.4em;
   margin: 0;
   font-size: 85%;
@@ -82,6 +83,15 @@ button:active {
 
 button:focus {
   border-color: #666;
+}
+
+.article-title {
+  font-size: 3em;
+  margin-bottom: 0;
+}
+
+h2 {
+  margin-top: 3em;
 }
 
 @font-face {

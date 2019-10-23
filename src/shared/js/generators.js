@@ -557,6 +557,18 @@ export function linePreview() {
   return output;
 }
 
+export function lineClusterPreview() {
+  const nPixels = Array.prototype.slice.apply(arguments).pop();
+  const output = [];
+  for (let x = 0; x < nPixels; x++) {
+    for (let y = 0; y < nPixels; y++) {
+      const vector = [x, y];
+      output.push(new Point(vector, y === nPixels - x ? "aliceblue" : "black"));
+    }
+  }
+  return output;
+}
+
 export function sineFrequency(nVectors, vectorSize) {
   const minFreq = Math.PI / (2 * vectorSize);
   const maxFreq = Math.PI / ((1 / 10) * vectorSize);
@@ -593,7 +605,7 @@ export function sinePhase(nVectors, vectorSize) {
   return output;
 }
 
-export function sinePreview(nPoints) {
+export function sinePreview(nPoints, angle) {
   const amplitude = nPoints / 2;
   const freq = Math.PI / (nPoints / 5);
 
@@ -601,7 +613,15 @@ export function sinePreview(nPoints) {
   for (let x = 0; x < nPoints; x++) {
     const progress = x / nPoints;
     const vector = [x, Math.sin(freq * x) * amplitude];
-    output.push(new Point(vector, angleColor(0)));
+    output.push(new Point(vector, angleColor(angle)));
   }
   return output;
+}
+
+export function sineFreqPreview(nPoints) {
+  return sinePreview(nPoints, 0);
+}
+
+export function sinePhasePreview(nPoints) {
+  return sinePreview(nPoints, Math.PI / 2);
 }

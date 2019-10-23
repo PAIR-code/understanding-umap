@@ -17,7 +17,11 @@ import ToyVisualization from "../visualizations/toy_visualization/components/Vis
 import ToyComparisonVisualization from "../visualizations/toy_comparison_visualization/components/Visualization.svelte";
 ```
 
-# { \_metadata.title }
+<h1 class="article-title">Understanding UMAP</h1>
+
+_Andy Coenen ([Google PAIR](https://ai.google/research/teams/brain/pair))_
+
+<Spacer height={20} />
 
 Dimensionality reduction is a powerful tool for machine learning practitioners to visualize and understand large, high dimensional datasets. One of the most widely used techniques for visualization is [t-SNE](https://lvdmaaten.github.io/tsne/), but its performance suffers with large datasets and using it correctly can be [challenging](https://distill.pub/2016/misread-tsne/).
 
@@ -47,7 +51,7 @@ While both algorithms exhibit strong local clustering and group similar categori
 
 ## A dip into UMAP theory
 
-UMAP, at its core, works very similarly to t-SNE - both are graph layout algorithms. In the simplest sense, UMAP constructs a high dimensional graph representaion of the data then optimizes a low-dimensional graph to be as structurally similar as possible. While the mathematics UMAP uses to construct the high-dimensional graph is advanced, the intuition behind them is remarkably simple.
+UMAP, at its core, works very similarly to t-SNE - both use graph layout algorithms to arrange data in low-dimensional space. In the simplest sense, UMAP constructs a high dimensional graph representation of the data then optimizes a low-dimensional graph to be as structurally similar as possible. While the mathematics UMAP uses to construct the high-dimensional graph is advanced, the intuition behind them is remarkably simple.
 
 In order to construct the initial high-dimensional graph, UMAP builds something called a "fuzzy simplicial complex". This is really just a representation of a weighted graph, with edge weights representing the likelihood that two points are connected. To determine connectedness, UMAP extends a radius outwards from each point, connecting points when those radii overlap. Choosing this radius is critical - too small a choice will lead to small, isolated clusters, while too large a choice will connect everything together. UMAP overcomes this challenge by choosing a radius locally, based on the distance to each point's *n*th nearest neighbor. UMAP then makes the graph "fuzzy" by decreasing the likelihood of connection as the radius grows. Finally, by stipulating that each point must be connected to at least its closest neighbor, UMAP ensures that local structure is preserved in balance with global structure.
 
@@ -84,7 +88,7 @@ The following visualization - extended from excellent work by [Max Noichl](https
   <MammothUmapVisualization />
   <span slot="caption">
     <span class="figure-number">Figure 5: </span>
-    UMAP projections of a 3D woolly mammoth skeleton (50,000 points) into 2 dimensions, with various settings for the `n_neighbors` and `min_dist` parameters.
+    UMAP projections of a 3D woolly mammoth skeleton (50,000 points) into 2 dimensions, with various settings for the <code>n_neighbors</code> and <code>min_dist</code> parameters.
   </span>
 </Figure>
 
@@ -92,17 +96,19 @@ While most applications of UMAP involve projection from high-dimensional data, t
 
 ## UMAP vs t-SNE, revisited
 
-The biggest difference between the the output of UMAP when compared with t-SNE is this balance between local and global structure - UMAP is often much better at preserving global structure in the final projection. This means that the inter-cluster relations are potentially more meaningful than in t-SNE. However, it's important to note that, because UMAP and t-SNE both necessarily warp the high-dimensional shape of the data when projecting to lower dimensions, any given axis or distance in lower dimensions still isn’t directly interpretable in the way of techniques such as PCA.
+The biggest difference between the the output of UMAP when compared with t-SNE is this balance between local and global structure - UMAP is often better at preserving global structure in the final projection. This means that the inter-cluster relations are potentially more meaningful than in t-SNE. However, it's important to note that, because UMAP and t-SNE both necessarily warp the high-dimensional shape of the data when projecting to lower dimensions, any given axis or distance in lower dimensions still isn’t directly interpretable in the way of techniques such as PCA.
 
 <Figure>
   <MammothTsneVisualization />
   <span slot="caption">
     <span class="figure-number">Figure 6: </span>
-    A comparison between UMAP and t-SNE projections of a 3D woolly mammoth skeleton (50,000 points) into 2 dimensions, with various settings for parameters. Notice how much more global structure is preserved with UMAP, particularly with larger values of nNeighbors.
+    A comparison between UMAP and t-SNE projections of a 3D woolly mammoth skeleton (50,000 points) into 2 dimensions, with various settings for parameters. Notice how much more global structure is preserved with UMAP, particularly with larger values of <code>n_neighbors</code>.
   </span>
 </Figure>
 
-Going back to the 3D mammoth example, we can easily see striking differences between the two algorithms' output. For lower values of the `perplexity` parameter, t-SNE tends to "spread out" the projected data with very little preservation of the global structure. In contrast, UMAP tends to group adjacent pieces of the higher-dimensional structure together in low dimensions, which reflects an increased preservation of global structure. Note that, using t-SNE, it takes an extremely high perplexity (~1000) to begin to see the global structure emerge, and at such large perplexity values the time to compute is dramatically longer. It's also notable that t-SNE projections vary widely from run to run, with different pieces of the higher-dimensional data projected to different locations. While UMAP is also a stochastic algorithm, it's striking how similar the resulting projections are from run to run and with different parameters. This is due, again, to UMAP's increased emphasis on global structure in comparison to t-SNE.
+Going back to the 3D mammoth example, we can easily see some big differences between the two algorithms' output. For lower values of the `perplexity` parameter, t-SNE tends to "spread out" the projected data with very little preservation of the global structure. In contrast, UMAP tends to group adjacent pieces of the higher-dimensional structure together in low dimensions, which reflects an increased preservation of global structure. Note that, using t-SNE, it takes an extremely high perplexity (~1000) to begin to see the global structure emerge, and at such large perplexity values the time to compute is dramatically longer. It's also notable that t-SNE projections vary widely from run to run, with different pieces of the higher-dimensional data projected to different locations. While UMAP is also a stochastic algorithm, it's striking how similar the resulting projections are from run to run and with different parameters. This is due, again, to UMAP's increased emphasis on global structure in comparison to t-SNE.
+
+It's worth noting that t-SNE and UMAP wind up performing very similarly on the toy examples from earlier figures, with the notable exception of the following example: A dense, tight cluster inside of a wide, sparse cluster. Interestingly, UMAP is unable to separate the two nested clusters, especially when dimensionality is high.
 
 <Figure>
   <ToyComparisonVisualization />
@@ -112,13 +118,39 @@ Going back to the 3D mammoth example, we can easily see striking differences bet
   </span>
 </Figure>
 
-It's worth noting that t-SNE and UMAP wind up performing very similarly on the toy examples from earlier figures. In fact, t-SNE generally makes "prettier" figures than UMAP in many of the toy examples. This is because t-SNE tends to distort the data more than UMAP, spreading the data out more evenly in lower dimensional space. Since UMAP is more incentivized to preserve global structure, the data is often less spread out but less distorted.
+The failure of the algorithm to handle this case of "containment" may be explained by UMAP's use of local distances in the initial graph construction. Since distances between points in high dimensions tend to be very similar ([the curse of dimensionality](https://en.wikipedia.org/wiki/Curse_of_dimensionality)), UMAP seems to be connecting the outer points of the inner cluster to those of the outer cluster. This, in effect, blends the two clusters together.
+
+<!-- In fact, t-SNE generally makes "prettier" figures than UMAP in many of the toy examples. This is because t-SNE tends to distort the data more than UMAP, spreading the data out more evenly in lower dimensional space. Since UMAP is more incentivized to preserve global structure, the data is often less spread out but less distorted. -->
 
 <!-- A useful way of conceptualizing dimensionality reduction is in terms of information - PCA (the classic dimensionality reduction technique) works by finding the linear projection which maximizes separation of points. This is essentially the same as preserving information. This makes intuitive sense - the more we spread points out the better we can group the similar and separate the dissimilar. t-SNE and UMAP both try to mazimize the information density of the projected data via a force-directed graph layout,and because this process is nonlinear they both wind up "warping" the data to fit it into a lower-dimensional space. The main difference between t-SNE and UMAP is the extent of this warping: t-SNE warps the data more, which leads to "prettier", more information-dense figures at the expense of global structure. Since UMAP better preserves global structure, the data is less "warped". -->
 
+## How to (mis)read UMAP
+
+While UMAP offers a number of advantages over t-SNE, it's by no means a silver bullet - and reading and understanding its results requires some care. It's worth revisiting our [previous work on (mis)reading t-SNE](https://distill.pub/2016/misread-tsne/), since many of the same takeaways apply to UMAP:
+
+#### 1. Hyperparameters really matter
+
+Choosing good values isn't easy, and depends on both the data and your goals (eg, how tightly packed the projection ought to be). This is where UMAP's speed is a big advantage - By running UMAP multiple times with a variety of hyperparameters, you can get a better sense of how the projection is affected by its parameters.
+
+#### 2. Cluster sizes in a UMAP plot mean nothing
+
+Just as in t-SNE, the size of clusters relative to each other is essentially meaningless. This is because UMAP uses local notions of distance to construct its high-dimensional graph representation.
+
+#### 3. Distances between clusters might not mean anything
+
+Likewise, the distances between clusters is likely to be meaningless. While it's true that the global positions of clusters are better preserved in UMAP, the distances between them are not meaningful. Again, this is due to using local distances when constructing the graph.
+
+#### 4. Random noise doesn’t always look random.
+
+Especially at low values of `n_neighbors`, spurious clustering can be observed.
+
+#### 5. You may need more than one plot
+
+Since the UMAP algorithm is stochastic, different runs with the same hyperparameters can yield different results. Additionally, since the choice of hyperparameters is so important, it can be very useful to run the projection multiple times with various hyperparameters.
+
 ## Conclusion
 
-UMAP is an incredibly powerful tool in the data scientist's arsenal, and offers a number of compelling advantages over t-SNE. While both UMAP and t-SNE produce somewhat similar output, the increased speed, better preservation of global structure, and more understandable parameters make UMAP a more effective tool for visualizing high dimensional data. Finally, it's important to remember that no dimensionality reduction technique is perfect - by necessity, we're distorting the data to fit it into lower dimensions - and UMAP is no exception. However, by building up an intuitive understanding of how the algorithm works and understanding how to tune its parameters, we can more effectively use this powerful tool to visualize and understand large, high-dimensional datasets.
+UMAP is an incredibly powerful tool in the data scientist's arsenal, and offers a number of advantages over t-SNE. While both UMAP and t-SNE produce somewhat similar output, the increased speed, better preservation of global structure, and more understandable parameters make UMAP a more effective tool for visualizing high dimensional data. Finally, it's important to remember that no dimensionality reduction technique is perfect - by necessity, we're distorting the data to fit it into lower dimensions - and UMAP is no exception. However, by building up an intuitive understanding of how the algorithm works and understanding how to tune its parameters, we can more effectively use this powerful tool to visualize and understand large, high-dimensional datasets.
 
 <Spacer height={500} />
 
@@ -137,3 +169,9 @@ Unfortunately, real-world high-dimensional data presents a problem that UMAP nee
 Note that since each point’s local notion of distance may be different than its neighbors’, we must resolve whether two points are connected based on potentially different directed edge weights. UMAP squares this inconsistency by computing the probability that at least one of the edges exist.
 
 Once the final, fuzzy simplicial complex is constructed, UMAP projects the data into lower dimensions essentially via a force-directed graph layout algorithm. This optimization step is actually very similar to t-SNE, but by jumping through the theoretical hoops while constructing our initial simplicial complex, UMAP is able to accelerate the optimization and preserve much more global structure than t-SNE.
+
+<Spacer height={50} />
+
+### Acknowledgements
+
+We'd like to thank [Max Noichl](https://homepage.univie.ac.at/noichlm94/) for the delightful mammoth visualization idea, and the [Smithshonian Institute](https://3d.si.edu/) for the 3D mammoth model. We'd also like to thank [Leland McInnes](https://twitter.com/leland_mcinnes?lang=en) for his excellent feedback, and of course the UMAP library itself.

@@ -30,7 +30,13 @@
     })
   );
 
-  const points = makeSine(nPoints, { width, height }, POINT_RADIUS);
+  let points = makeSine(nPoints, { width, height }, POINT_RADIUS);
+
+  const refreshPoints = () => {
+    points = makeSine(nPoints, { width, height }, POINT_RADIUS);
+    compute();
+    redraw();
+  };
 
   let nearestEntries;
   let distances;
@@ -81,9 +87,8 @@
       return colorScale(point.x);
     });
   };
-  compute();
 
-  afterUpdate(async () => {
+  const redraw = () => {
     if (lastNNearest !== nNearest) {
       compute();
       lastNNearest = nNearest;
@@ -157,6 +162,12 @@
         }
       }
     });
+  };
+
+  compute();
+
+  afterUpdate(() => {
+    redraw();
   });
 </script>
 
@@ -173,6 +184,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
   }
 
   .controls {
@@ -187,6 +199,16 @@
     margin-right: 10px;
     width: 200px;
   }
+
+  .refresh {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    cursor: pointer;
+  }
+  .refresh:hover {
+    color: #333;
+  }
 </style>
 
 <div class="container">
@@ -198,5 +220,8 @@
   <div class="controls">
     <label>n_nearest: {nNearest}</label>
     <Slider min={2} max={10} step={1} bind:value={nNearest} />
+  </div>
+  <div class="refresh" on:click={refreshPoints}>
+    <i class="material-icons">refresh</i>
   </div>
 </div>

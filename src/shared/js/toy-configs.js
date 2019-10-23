@@ -109,7 +109,7 @@ export const extendedDemos = [
       }
     ],
     generator: generators.clusteredLineImages,
-    previewOverride: generators.linePreview
+    previewOverride: generators.lineClusterPreview
   },
   {
     name: "Sine frequency",
@@ -130,7 +130,7 @@ export const extendedDemos = [
       }
     ],
     generator: generators.sineFrequency,
-    previewOverride: generators.sinePreview
+    previewOverride: generators.sineFreqPreview
   },
   {
     name: "Sine phase",
@@ -151,7 +151,7 @@ export const extendedDemos = [
       }
     ],
     generator: generators.sinePhase,
-    previewOverride: generators.sinePreview
+    previewOverride: generators.sinePhasePreview
   }
 ];
 

@@ -10,8 +10,10 @@
   import Preview from "./Preview.svelte";
   import { UMAP } from "umap-js";
 
+  const DEFAULT_DEMO_INDEX = 11;
+
   let isLoaded = false;
-  let selectedDemoIndex = 0;
+  let selectedDemoIndex = DEFAULT_DEMO_INDEX;
   let preprocessedDemos;
   let points = [];
   let selectedDemo = demos[selectedDemoIndex];
@@ -79,7 +81,7 @@
 
   onMount(async () => {
     preprocessedDemos = await loadData();
-    setSelectedDemo(0);
+    setSelectedDemo(DEFAULT_DEMO_INDEX);
     isLoaded = true;
   });
 </script>
