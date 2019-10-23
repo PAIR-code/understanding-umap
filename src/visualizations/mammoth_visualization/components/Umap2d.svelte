@@ -1,7 +1,7 @@
 <script>
   import { afterUpdate, onMount } from "svelte";
   import Slider from "../../../shared/components/Slider.svelte";
-  import Projection2d from "./Projection2D.svelte";
+  import Projection2d from "./Projection2d.svelte";
 
   const sliderWidth = 230;
   const neighbors = [3, 5, 10, 15, 20, 50, 100, 200];

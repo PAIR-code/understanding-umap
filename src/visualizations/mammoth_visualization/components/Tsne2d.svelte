@@ -2,7 +2,7 @@
   import { afterUpdate, onMount } from "svelte";
   import Slider from "../../../shared/components/Slider.svelte";
   import { TSNE_MAMMOTH_PERPLEXITIES } from "../../../shared/js/parameters";
-  import Projection2d from "./Projection2D.svelte";
+  import Projection2d from "./Projection2d.svelte";
 
   const sliderWidth = 230;
   // prettier-ignore
