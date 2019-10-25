@@ -109,6 +109,11 @@ export function visualize(points, canvas, message, no3d) {
     var y = -(p.coords[1] - centerY) * scale + height / 2;
     var r = is3d ? zScale(p.coords[2]) : 4;
     circle(g, x, y, r);
+
+    if (!is3d){ 
+      p.px = x
+      p.py = y
+    }
   }
 
   if (message) {

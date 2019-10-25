@@ -3,7 +3,6 @@
   import demos from "../js/demos";
   import { loadData } from "../js/load_data";
   import {
-    visualize,
     getPoints,
     getDemoPreviewOverride
   } from "../../../shared/js/visualize";
@@ -17,6 +16,7 @@
   let preprocessedDemos;
   let points = [];
   let selectedDemo = demos[selectedDemoIndex];
+  let hoveredPointIndex = -1;
   let demoPoints = getPoints(selectedDemo);
   let entries;
 
@@ -26,8 +26,6 @@
   const perplexityOptions = [3, 5, 15, 30, 50, 100];
 
   const projections = [];
-
-  let canvas;
 
   const width = 1024;
   const height = 1024;
@@ -222,6 +220,8 @@
                 {#each entries[key] as points}
                   <Preview
                     {points}
+                    on:hover={e => hoveredPointIndex = e.detail}
+                    {hoveredPointIndex}
                     onClick={() => {}}
                     highlighted={true}
                     selectable={false}
