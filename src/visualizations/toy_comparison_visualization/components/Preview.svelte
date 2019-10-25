@@ -27,10 +27,10 @@
   export let highlighted = false;
   export let size = 200;
 
-  function handleMousemove(){
-    var scale = size/canvas.offsetWidth
-    var mx = event.layerX*scale;
-    var my = event.layerY*scale;
+  function handleMousemove() {
+    var scale = size / canvas.offsetWidth;
+    var mx = event.layerX * scale;
+    var my = event.layerY * scale;
 
     if (!points && points.length) return;
 
@@ -40,14 +40,14 @@
       var dx = d.px - mx;
       var dy = d.py - my;
 
-      var dist = dx*dx + dy*dy;
-      if (dist < minDist){
+      var dist = dx * dx + dy * dy;
+      if (dist < minDist) {
         minDist = dist;
         minIndex = i;
       }
-    })
+    });
 
-    dispatch('hover', minIndex);
+    dispatch("hover", minIndex);
   }
 
   let canvas;
@@ -122,7 +122,7 @@
     width: 100%;
     opacity: 0.3;
   }
-  .demo-data svg{
+  .demo-data svg {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -143,15 +143,21 @@
   {highlighted ? 'highlighted' : ''}
   {selectable ? '' : 'non-selectable'}"
   on:click={onClick}>
-  <canvas bind:this={canvas} width={size} height={size} on:mousemove={handleMousemove} />
+  <canvas
+    bind:this={canvas}
+    width={size}
+    height={size}
+    on:mousemove={handleMousemove} />
   <svg bind:this={svg} viewBox="0 0 {size} {size}">
     {#if points[hoveredPointIndex] && points[hoveredPointIndex].px}
       <circle
-        r='5' fill='none' stroke='#000' stroke-width='2' 
-        opacity='{hoveredPointIndex > -1 ? 1 : 0}'
+        r="5"
+        fill="none"
+        stroke="#000"
+        stroke-width="2"
+        opacity={hoveredPointIndex > -1 ? 1 : 0}
         cx={points[hoveredPointIndex].px}
-        cy={points[hoveredPointIndex].py}>
-      </circle>
+        cy={points[hoveredPointIndex].py} />
     {/if}
   </svg>
 </div>
