@@ -21,8 +21,9 @@ yarn dev:mammoth-tsne
 - min_dist axis match styles with text
 - change minDist to min_dist 
 - bolding shifts text
-- linked hover UMAP vs t-SNE
-x linked hover hyperparameters
+- x linked hover mammoth-tsne
+- transition mammoth hover on slide (maybe css transitions?) 
+- x linked hover hyperparameters
 - linked hover 3d - 2d umap 
 - linked hover umap tsne
 - x linked hover toy_comparison
