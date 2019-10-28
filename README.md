@@ -11,6 +11,7 @@ yarn dev:toy
 yarn dev:toy_comparison
 yarn dev:cech
 yarn dev:hyperparameters
+yarn dev:toy-comparison
 yarn dev:mammoth-umap
 yarn dev:mammoth-tsne
 ```
