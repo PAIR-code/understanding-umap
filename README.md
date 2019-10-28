@@ -10,6 +10,7 @@ yarn dev
 yarn dev:toy
 yarn dev:cech
 yarn dev:hyperparameters
+yarn dev:toy-comparison
 yarn dev:mammoth-umap
 yarn dev:mammoth-tsne
 ```
