@@ -22,6 +22,7 @@ yarn dev:mammoth-tsne
 - change minDist to min_dist 
 - bolding shifts text
 - linked hover UMAP vs t-SNE
-- linked hover UMAP Parameters
+x linked hover hyperparameters
 - linked hover 3d - 2d umap 
 - linked hover umap tsne
+- x linked hover toy_comparison

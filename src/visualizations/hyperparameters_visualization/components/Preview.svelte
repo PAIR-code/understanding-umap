@@ -14,16 +14,44 @@
   limitations under the License.
   ==============================================================================*/
 
-  import { afterUpdate, onMount } from "svelte";
+  import { afterUpdate, onMount, createEventDispatcher } from "svelte";
   import { getPoints, visualize } from "../../../shared/js/visualize";
+
+  const dispatch = createEventDispatcher();
 
   export let points;
   export let onClick;
   export let selected;
+  export let hoveredPointIndex = -1;
   export let selectable = true;
   export let highlighted = false;
+  export let size = 150;
+
+  function handleMousemove(){
+    var scale = size/canvas.offsetWidth
+    var mx = event.layerX*scale;
+    var my = event.layerY*scale;
+
+    if (!points && points.length) return;
+
+    var minDist = Infinity;
+    var minIndex = 0;
+    points.forEach((d, i) => {
+      var dx = d.px - mx;
+      var dy = d.py - my;
+
+      var dist = dx*dx + dy*dy;
+      if (dist < minDist){
+        minDist = dist;
+        minIndex = i;
+      }
+    })
+
+    dispatch('hover', minIndex);
+  }
 
   let canvas;
+  let svg;
 
   onMount(() => {
     visualize(points, canvas, null, null);
@@ -53,6 +81,12 @@
   .demo-data.non-selectable {
     cursor: default;
     box-shadow: none;
+    margin: -1px !important;
+    position: relative;
+    left: 4px;
+    top: 4px;
+    border-radius: 0px;
+    padding: 0px;
   }
 
   @media (min-width: 480px) {
@@ -91,6 +125,14 @@
     width: 100%;
     opacity: 0.3;
   }
+  .demo-data svg{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    pointer-events: none;
+  }
   .demo-data.highlighted canvas {
     opacity: 1;
   }
@@ -104,5 +146,15 @@
   {highlighted ? 'highlighted' : ''}
   {selectable ? '' : 'non-selectable'}"
   on:click={onClick}>
-  <canvas bind:this={canvas} width={150} height={150} />
+  <canvas bind:this={canvas} width={size} height={size} on:mousemove={handleMousemove} />
+  <svg bind:this={svg} viewBox="0 0 {size} {size}">
+    {#if points[hoveredPointIndex] && points[hoveredPointIndex].px}
+      <circle
+        r='5' fill='none' stroke='#000' stroke-width='2' 
+        opacity='{hoveredPointIndex > -1 ? 1 : 0}'
+        cx={points[hoveredPointIndex].px}
+        cy={points[hoveredPointIndex].py}>
+      </circle>
+    {/if}
+  </svg>
 </div>
