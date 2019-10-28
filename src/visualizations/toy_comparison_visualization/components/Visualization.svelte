@@ -154,6 +154,8 @@
     flex-direction: row;
     align-items: flex-end;
     justify-content: space-around;
+    position: relative;
+    left: 10px;
   }
 
   .hyperparam-header {
@@ -179,6 +181,7 @@
   .rows-container {
     /* padding: 40px 0 0 40px; */
     position: relative;
+    margin-bottom: 10px;
   }
 
   .rows {
