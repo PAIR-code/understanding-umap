@@ -24,6 +24,6 @@ yarn dev:mammoth-tsne
 - x linked hover mammoth-tsne
 - transition mammoth hover on slide (maybe css transitions?) 
 - x linked hover hyperparameters
-- linked hover mammoth-umap
+- x linked hover mammoth-umap
 - linked hover umap tsne
 - x linked hover toy_comparison

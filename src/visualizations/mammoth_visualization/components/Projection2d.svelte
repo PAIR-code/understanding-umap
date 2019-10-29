@@ -95,7 +95,7 @@
 </style>
 
 <div class='container'>
-  <canvas bind:this={canvas} width={size} height={size} on:mousemove={handleMousemove}  on:mouseout={handleMouseout} />
+  <canvas bind:this={canvas} width={size} height={size} on:mousemove={handleMousemove} on:mouseout={handleMouseout} />
 
   <svg bind:this={svg} viewBox="0 0 {size} {size}">
     <text>{projection[hoveredPointIndex]}</text>

@@ -29,6 +29,10 @@
   export let title = "";
   export let hoveredPointIndex = -1;
 
+  function handleMouseout(){
+    dispatch('hover', -1);
+  }
+
   const toggleOrbit = () => {
     isOrbiting = true;
     scatterGL.startOrbitAnimation();
@@ -41,21 +45,25 @@
       metadata: []
     };
 
-    console.log(dataset)
-
     const onCameraMove = () => {
       if (isOrbiting) isOrbiting = false;
     };
 
-    const styles = { fog: { enabled: false } };
+    const styles = { 
+      fog: { enabled: false }, 
+      point: {scaleHover: 3.5, colorHover: 'rgba(0,0,0,1)'} 
+    };
+
     scatterGL = new ScatterGL(container, {
       styles,
       selectEnabled: false,
       onCameraMove,
       onHover: d => {
-        if (d !== null) dispatch('hover', d)
+        if (d === null || d === hoveredPointIndex) return
+        dispatch('hover', d)
       }
     });
+    window.scatterGLObj = scatterGL
 
     scatterGL.setPointColorer(i => {
       const colorIndex = colorIndices[i];
@@ -66,10 +74,12 @@
 
 
   afterUpdate(() => {
-    scatterGL.setPointColorer(i => {
-      const colorIndex = colorIndices[i];
-      return i == hoveredPointIndex ? "rgba(0, 0, 0, 1)" : COLORS[colorIndex];
-    });
+    // scatterGL.setPointColorer(i => {
+    //   const colorIndex = colorIndices[i];
+    //   return i == hoveredPointIndex ? "rgba(0, 0, 0, 1)" : COLORS[colorIndex];
+    // });
+    // if (!colorIndices[hoveredPointIndex]) return
+    scatterGL.setHoverPointIndex(hoveredPointIndex);
   })
 
 
@@ -109,8 +119,7 @@
   }
 </style>
 
-<div class="container">
-  {hoveredPointIndex}
+<div class="container" on:mouseout={handleMouseout}>
   {#if title}
     <div class="title">{title}</div>
   {/if}
