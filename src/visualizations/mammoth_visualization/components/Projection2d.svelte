@@ -69,7 +69,12 @@
     tween = new Tween(projection, tweenCallback);
   });
 
+  // Skip rerender if projection hasn't changed
+  // Not sure if there's a more svelte way of doing this
+  let lastProjection = null
   afterUpdate(() => {
+    if (projection == lastProjection) return;
+    lastProjection = projection;
     tween.beginTween(projection);
   });
 </script>
