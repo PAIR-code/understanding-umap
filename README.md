@@ -21,7 +21,9 @@ yarn dev:mammoth-tsne
 - min_dist axis match styles with text
 - change minDist to min_dist 
 - transition mammoth hover on slider (maybe css transitions?) 
-- avoid double renders when rotation is on
+- don't rerender on hover 
+https://svelte.dev/repl/e570baa8261f468e948e249c028e63e7?version=3.12.1
+- x avoid double renders when rotation is on
 - x bolding shifts text
 - x linked hover mammoth-tsne
 - x linked hover hyperparameters
