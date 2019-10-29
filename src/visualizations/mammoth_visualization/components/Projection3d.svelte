@@ -14,9 +14,11 @@
   limitations under the License.
   ==============================================================================*/
   
-  import { onMount } from "svelte";
+  import { onMount, afterUpdate, createEventDispatcher } from "svelte";
   import { loadData } from "../js/load-data";
   import { COLORS } from "../js/colors";
+
+  const dispatch = createEventDispatcher();
 
   let container;
   let scatterGL;
@@ -25,6 +27,11 @@
   export let colorIndices;
   export let mammoth3d;
   export let title = "";
+  export let hoveredPointIndex = -1;
+
+  function handleMouseout(){
+    dispatch('hover', -1);
+  }
 
   const toggleOrbit = () => {
     isOrbiting = true;
@@ -42,12 +49,21 @@
       if (isOrbiting) isOrbiting = false;
     };
 
-    const styles = { fog: { enabled: false } };
+    const styles = { 
+      fog: { enabled: false }, 
+      point: {scaleHover: 3.5, colorHover: 'rgba(0,0,0,1)'} 
+    };
+
     scatterGL = new ScatterGL(container, {
       styles,
       selectEnabled: false,
-      onCameraMove
+      onCameraMove,
+      onHover: d => {
+        if (d === null || d === hoveredPointIndex) return
+        dispatch('hover', d)
+      }
     });
+    window.scatterGLObj = scatterGL
 
     scatterGL.setPointColorer(i => {
       const colorIndex = colorIndices[i];
@@ -55,6 +71,14 @@
     });
     scatterGL.render(dataset);
   });
+
+
+  afterUpdate(() => {
+    // debugger
+    scatterGL.setHoverPointIndex(hoveredPointIndex);
+  })
+
+
 </script>
 
 <style>
@@ -91,7 +115,7 @@
   }
 </style>
 
-<div class="container">
+<div class="container" on:mouseout={handleMouseout}>
   {#if title}
     <div class="title">{title}</div>
   {/if}

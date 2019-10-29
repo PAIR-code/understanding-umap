@@ -26,6 +26,8 @@
   let umapProjections;
   let tsneProjections;
   let mammoth3d;
+  let hoveredPointIndex = -1;
+
 
   onMount(async () => {
     const data = await loadData();
@@ -49,11 +51,15 @@
   {#if isLoaded}
     <Tsne2d
       {colorIndices}
+      on:hover={e => hoveredPointIndex = e.detail}
+      {hoveredPointIndex}
       projections={tsneProjections}
       title={'2D t-SNE projection'}
       times={times.tsne} />
     <Umap2d
       {colorIndices}
+      on:hover={e => hoveredPointIndex = e.detail}
+      {hoveredPointIndex}
       projections={umapProjections}
       title={'2D UMAP projection'}
       times={times.umap} />

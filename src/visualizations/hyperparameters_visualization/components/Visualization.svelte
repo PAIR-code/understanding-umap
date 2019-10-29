@@ -30,6 +30,7 @@
   let selectedDemoIndex = 0;
   let points = [];
   let selectedDemo = demos[selectedDemoIndex];
+  let hoveredPointIndex = -1;
   let demoPoints = getPoints(selectedDemo);
   let entries;
 
@@ -111,6 +112,7 @@
     display: flex;
     font-size: 12px;
     width: 60%;
+    margin-right: 4px;
   }
 
   .left-column {
@@ -253,6 +255,8 @@
                 {#each row as points}
                   <Preview
                     {points}
+                    on:hover={e => hoveredPointIndex = e.detail}
+                    {hoveredPointIndex}
                     onClick={() => {}}
                     highlighted={true}
                     selectable={false}

@@ -157,13 +157,16 @@
 
     umapScatterGL = new ScatterGL(umapContainer, {
       ...scatterGLOptions,
-      camera: { zoom: 1.2 }
+      camera: { zoom: 1.2 },
+      onHover: d => tsneScatterGL.setHoverPointIndex(d),
     });
     tsneScatterGL = new ScatterGL(tsneContainer, {
       ...scatterGLOptions,
-      camera: { zoom: 0.9 }
+      camera: { zoom: 0.9 },
+      onHover: d => umapScatterGL.setHoverPointIndex(d),
     });
     setDefaultPointColorer();
+
     umapScatterGL.render(umapDataset);
     tsneScatterGL.render(tsneDataset);
   });
@@ -210,7 +213,8 @@
   }
 
   .category.selected {
-    font-weight: 800;
+    /*font-weight: 800;*/
+    outline: 1px solid #000;
   }
 
   .category:hover {

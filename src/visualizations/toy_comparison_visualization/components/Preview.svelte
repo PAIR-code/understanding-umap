@@ -83,6 +83,9 @@
     cursor: default;
     box-shadow: none;
     border-radius: 0px;
+    margin: -1px !important;
+    position: relative;
+    left: 4px;
   }
 
   @media (min-width: 480px) {

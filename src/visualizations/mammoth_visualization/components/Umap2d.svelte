@@ -32,6 +32,7 @@
   export let projections;
   export let title = "";
   export let times = null;
+  export let hoveredPointIndex = -1;
 
   const getKey = () => `n=${nNeighbors},d=${minDist}`;
   const getCurrentProjection = () => projections[getKey()];
@@ -84,7 +85,7 @@
   {#if title}
     <div class="title">{title}</div>
   {/if}
-  <Projection2d {projection} {colorIndices} />
+  <Projection2d on:hover {projection} {colorIndices} {hoveredPointIndex} />
   <div class="controls">
     <label class="label">
       <span class="label-text">n_neighbors:</span>
