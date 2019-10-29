@@ -74,11 +74,7 @@
 
 
   afterUpdate(() => {
-    // scatterGL.setPointColorer(i => {
-    //   const colorIndex = colorIndices[i];
-    //   return i == hoveredPointIndex ? "rgba(0, 0, 0, 1)" : COLORS[colorIndex];
-    // });
-    // if (!colorIndices[hoveredPointIndex]) return
+    // debugger
     scatterGL.setHoverPointIndex(hoveredPointIndex);
   })
 
