@@ -23,6 +23,7 @@
   let colorIndices;
   let projections;
   let mammoth3d;
+  let hoveredPointIndex = -1;
 
   onMount(async () => {
     const data = await loadData();
@@ -43,8 +44,18 @@
 
 <div class="container">
   {#if isLoaded}
-    <Projection3d {colorIndices} {mammoth3d} title={'Original 3D Data'} />
-    <Umap2d {colorIndices} {projections} title={'2D UMAP Projection'} />
+    <Projection3d 
+      {colorIndices}  
+      {mammoth3d}
+      on:hover={e => hoveredPointIndex = e.detail}
+      {hoveredPointIndex}
+      title={'Original 3D Data'} />
+    <Umap2d 
+      {colorIndices} 
+      {projections} 
+      on:hover={e => hoveredPointIndex = e.detail}
+      {hoveredPointIndex}
+      title={'2D UMAP Projection'} />
   {:else}
     <p>loading...</p>
   {/if}

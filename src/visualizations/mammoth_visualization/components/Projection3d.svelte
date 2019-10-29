@@ -14,9 +14,11 @@
   limitations under the License.
   ==============================================================================*/
   
-  import { onMount } from "svelte";
+  import { onMount, afterUpdate, createEventDispatcher } from "svelte";
   import { loadData } from "../js/load-data";
   import { COLORS } from "../js/colors";
+
+  const dispatch = createEventDispatcher();
 
   let container;
   let scatterGL;
@@ -25,6 +27,7 @@
   export let colorIndices;
   export let mammoth3d;
   export let title = "";
+  export let hoveredPointIndex = -1;
 
   const toggleOrbit = () => {
     isOrbiting = true;
@@ -38,6 +41,8 @@
       metadata: []
     };
 
+    console.log(dataset)
+
     const onCameraMove = () => {
       if (isOrbiting) isOrbiting = false;
     };
@@ -46,7 +51,10 @@
     scatterGL = new ScatterGL(container, {
       styles,
       selectEnabled: false,
-      onCameraMove
+      onCameraMove,
+      onHover: d => {
+        if (d !== null) dispatch('hover', d)
+      }
     });
 
     scatterGL.setPointColorer(i => {
@@ -55,6 +63,16 @@
     });
     scatterGL.render(dataset);
   });
+
+
+  afterUpdate(() => {
+    scatterGL.setPointColorer(i => {
+      const colorIndex = colorIndices[i];
+      return i == hoveredPointIndex ? "rgba(0, 0, 0, 1)" : COLORS[colorIndex];
+    });
+  })
+
+
 </script>
 
 <style>
@@ -92,6 +110,7 @@
 </style>
 
 <div class="container">
+  {hoveredPointIndex}
   {#if title}
     <div class="title">{title}</div>
   {/if}
