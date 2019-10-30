@@ -279,11 +279,11 @@
       <div class="umap-options">
         <div class="parameters-label">UMAP Parameters</div>
         <Parameter
-          options={{ name: 'nNeighbors', min: nNeighborsMin, max: nNeighborsMax, step: 1 }}
+          options={{ name: 'n_neighbors', min: nNeighborsMin, max: nNeighborsMax, step: 1 }}
           bind:value={nNeighbors}
           onChange={restart} />
         <Parameter
-          options={{ name: 'minDist', min: minDistMin, max: minDistMax, step: 0.01 }}
+          options={{ name: 'min_dist', min: minDistMin, max: minDistMax, step: 0.01 }}
           bind:value={minDist}
           onChange={restart} />
       </div>

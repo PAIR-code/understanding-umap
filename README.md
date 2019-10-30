@@ -19,7 +19,7 @@ yarn dev:mammoth-tsne
 # Adam TODO
 
 - min_dist axis match styles with text
-- change minDist to min_dist 
+- x change minDist to min_dist 
 - transition mammoth hover on slider (maybe css transitions?) 
 x don't rerender on hover 
 https://svelte.dev/repl/e570baa8261f468e948e249c028e63e7?version=3.12.1
