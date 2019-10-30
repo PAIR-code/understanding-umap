@@ -61,6 +61,7 @@
   }
 
   const tweenCallback = (projection, isActive, percent) => {
+    console.log('hi')
     const dimensions = { width: size, height: size };
     render2d(canvas, dimensions, projection, colorIndices);
   };

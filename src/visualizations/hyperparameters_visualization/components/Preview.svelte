@@ -57,7 +57,10 @@
     visualize(points, canvas, null, null);
   });
 
+  let prevPoints = null;
   afterUpdate(() => {
+    if (points == prevPoints) return;
+    prevPoints = points;
     visualize(points, canvas, null, null);
   });
 </script>
