@@ -1,0 +1,56 @@
+---
+title: A deeper dive into UMAP theory
+layout: ./Layout.svelte
+---
+
+<!-- Copyright 2019 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================-->
+
+```js exec
+import Figure from "./Figure.svelte";
+import Spacer from "./Spacer.svelte";
+import FmnistLabel from "./FminstLabel.svelte";
+
+import CechVisualization from "../visualizations/cech_visualization/components/Visualization.svelte";
+```
+
+<h1 class="article-title">A deeper dive into UMAP theory</h1>
+
+_Andy Coenen, Adam Pearce ([Google PAIR](https://ai.google/research/teams/brain/pair))_
+
+<Spacer height={20} />
+
+The following explanation offers a rather high-level explanation of the theory behind UMAP, following up on the even simpler overview found in [Understanding UMAP](__URL_PREFIX__/index.html). Those interested in getting the full picture are encouraged to read UMAP's [excellent documentation](https://umap-learn.readthedocs.io/en/latest/how_umap_works.html).
+
+Most dimensionality reduction algorithms fit into either one of two broad categories: Matrix factorization (such as PCA) or Graph layout (such as t-SNE). At its core, UMAP is a graph layout algorithm, very similar to t-SNE, but with a number of key theoretical underpinnings that give the algorithm a more solid footing.
+
+In its simplest sense, the UMAP algorithm consists of two steps: construction of a graph in high dimensions followed by an optimization step to find the most similar graph in lower dimensions. In order to achieve this goal, the algorithm relies on a number of insights from algebraic topology and Riemannian geometry. Despite the intimidating mathematics, the intuitions behind the core principles are actually quite simple: UMAP essentially constructs a weighted graph from the high dimensional data, with edge strength representing how “close” a given point is to another, then projects this graph down to a lower dimensionality. The advanced mathematics gives UMAP a solid footing with which to handle the challenges of doing this in high dimensions with real data.
+
+In order to construct the initial high-dimensional graph, UMAP relies on constructing what’s known as a **Čech complex**, which is a way of representing a topology combinatorially (using sets rather than continuous geometry). In order to get there, we’ll use a basic building block called a **simplex**. Geometrically, a simplex is a k-dimensional object formed by connecting k + 1 points - for example, a 0-simplex is a point, a 1-simplex is a line, and a 2-simplex is a triangle. By thinking of our data as a set of simplices, we can capture a representation of the topology, and by combining those simplices in a specific way to form a Čech complex, we get some theoretical guarantees about how well it represents the topology.
+
+<Figure>
+  <CechVisualization />
+  <span slot="caption">
+    <span class="figure-number">Figure 3: </span>Adjust the slider to extend a radius outwards from each point, computed by the distance to its nth nearest neighbor. Notice that past the intersection with the first neighbor, the radius begins to get fuzzy, with subsequent connections appearing with less weight;
+  </span>
+</Figure>
+
+We begin by considering each point in our data as a sample from a continuous, high-dimensional shape (our topology). We can think of each point as a 0-simplex. By extending out from each point some radius r, and connecting points that overlap, we can construct sets of 1-, 2-, and higher-dimensional simplices. This simplicial complex does a reasonable job of approximating the fundamental topology of the dataset, explained by the [Nerve Theorem](https://en.wikipedia.org/wiki/Nerve_of_a_covering). It turns out that the bulk of the work of representing the topology is actually being done by the 0- and 1-simplices, which constitute what's known as a **Vietoris-Rips Complex**. Most importantly, the **Vietoris-Rips Complex** is much easier to work with computationally, especially for large datasets. By considering just the 0- and 1-simplices, we’ve effectively just constructed a graph, which can be readily projected into a lower-dimensional analogue.
+
+Unfortunately, real-world high-dimensional data presents a problem that UMAP needs to overcome - picking the right sized radius. Too small a radius and we’ll tend towards isolated, local clusters of points. Too large, and everything becomes connected. This problem is exacerbated by the **curse of dimensionality**, where distances between points become increasingly similar in higher dimensions. UMAP solves this problem in a clever way: Rather than using a fixed radius, UMAP uses a variable radius determined for each point based on the distance to its kth nearest neighbor. Within this local radius, connectedness is then made “fuzzy” by making each connection a probability, with further points less likely to be connected. Since we don’t want any points to be completely isolated, a constraint is added that all points must be connected to at least its closest neighboring point. The final output of this process is a weighted graph, with edge weights representing the likelihood that two points are “connected” in our high-dimensional manifold.
+
+Note that since each point’s local notion of distance may be different than its neighbors’, we must resolve whether two points are connected based on potentially different directed edge weights. UMAP squares this inconsistency by computing the probability that at least one of the edges exist.
+
+Once the final, fuzzy simplicial complex is constructed, UMAP projects the data into lower dimensions essentially via a force-directed graph layout algorithm. This optimization step is actually very similar to t-SNE, but by jumping through the theoretical hoops while constructing our initial simplicial complex, UMAP is able to accelerate the optimization and preserve much more global structure than t-SNE.

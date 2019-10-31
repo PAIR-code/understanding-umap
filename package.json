@@ -4,6 +4,7 @@
   "devDependencies": {
     "@babel/core": "^7.6.0",
     "@babel/node": "^7.6.1",
+    "@rollup/plugin-replace": "^2.2.0",
     "atob": "^2.1.2",
     "btoa": "^1.2.1",
     "d3": "^5.12.0",
@@ -15,6 +16,7 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-static-site": "^0.1.0",
     "rollup-plugin-svelte": "^5.0.3",
     "rollup-plugin-terser": "^4.0.4",
     "rollup-plugin-visualizer": "^2.6.0",
@@ -31,8 +33,10 @@
     "umap-js": "^1.3.1"
   },
   "scripts": {
-    "autobuild": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c -w",
-    "build": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c",
+    "autobuild": "node node_modules/rollup/dist/bin/rollup -c -w",
+    "build": "run-s build:main build:supplement",
+    "build:main": "node node_modules/rollup/dist/bin/rollup -c --environment build:main",
+    "build:supplement": "node node_modules/rollup/dist/bin/rollup -c --environment build:supplement",
     "compress": "yarn preprocess:mammoth && node -r esm scripts/compress_preprocessed.js",
     "deploy": "yarn build && node deploy.js",
     "dev": "run-p start:dev autobuild",
@@ -42,6 +46,7 @@
     "dev:hyperparameters": "FIGURE=hyperparameters run-p dev",
     "dev:mammoth-umap": "FIGURE=mammoth-umap run-p dev",
     "dev:mammoth-tsne": "FIGURE=mammoth-tsne run-p dev",
+    "dev:supplement": "FIGURE=supplement run-p dev",
     "dev:toy": "FIGURE=toy run-p dev",
     "dev:toy_comparison": "FIGURE=toy_comparison run-p dev",
     "preprocess": "run-s preprocess:mammoth preprocess:hyperparameters preprocess:toy_comparison compress",
