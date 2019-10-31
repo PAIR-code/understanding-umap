@@ -34,7 +34,7 @@ import ToyComparisonVisualization from "../visualizations/toy_comparison_visuali
 
 <h1 class="article-title">Understanding UMAP</h1>
 
-_Andy Coenen, Adam Pearce ([Google PAIR](https://ai.google/research/teams/brain/pair))_
+_Andy Coenen, Adam Pearce_ | _[Google PAIR](https://ai.google/research/teams/brain/pair)_
 
 <Spacer height={20} />
 
