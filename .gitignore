@@ -2,5 +2,7 @@ stats.html
 .DS_Store
 node_modules
 public/bundle.*
+public/bundle-supplement.*
+public/*.html
 
 stats.html
