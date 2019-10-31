@@ -13,14 +13,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   ==============================================================================*/
-  
+
   import { afterUpdate, onMount, createEventDispatcher } from "svelte";
   import Slider from "../../../shared/components/Slider.svelte";
   import { COLORS } from "../js/colors";
   import { loadData } from "../js/load-data";
   import { Tween } from "../js/tween";
   import { render2d } from "../js/render";
-
 
   const dispatch = createEventDispatcher();
 
@@ -33,10 +32,10 @@
   export let hoveredPointIndex = -1;
   export let size = 1024;
 
-  function handleMousemove(){
-    var scale = size/canvas.offsetWidth
-    var mx = event.layerX*scale;
-    var my = event.layerY*scale;
+  function handleMousemove() {
+    var scale = size / canvas.offsetWidth;
+    var mx = event.layerX * scale;
+    var my = event.layerY * scale;
 
     if (!colorIndices && colorIndices.length) return;
 
@@ -46,22 +45,21 @@
       var dx = d[0] - mx;
       var dy = d[1] - my;
 
-      var dist = dx*dx + dy*dy;
-      if (dist < minDist){
+      var dist = dx * dx + dy * dy;
+      if (dist < minDist) {
         minDist = dist;
         minIndex = i;
       }
-    })
+    });
 
-    dispatch('hover', minIndex);
+    dispatch("hover", minIndex);
   }
 
-  function handleMouseout(){
-    dispatch('hover', -1);
+  function handleMouseout() {
+    dispatch("hover", -1);
   }
 
   const tweenCallback = (projection, isActive, percent) => {
-    console.log('hi')
     const dimensions = { width: size, height: size };
     render2d(canvas, dimensions, projection, colorIndices);
   };
@@ -72,7 +70,7 @@
 
   // Skip rerender if projection hasn't changed
   // Not sure if there's a more svelte way of doing this
-  let lastProjection = null
+  let lastProjection = null;
   afterUpdate(() => {
     if (projection == lastProjection) return;
     lastProjection = projection;
@@ -87,35 +85,38 @@
     margin-bottom: 20px;
   }
 
-  svg{
+  svg {
     position: absolute;
     top: 0px;
     left: 0px;
     pointer-events: none;
   }
 
-  .container{
+  .container {
     width: 100%;
     position: relative;
   }
 </style>
 
-<div class='container'>
-  <canvas bind:this={canvas} width={size} height={size} on:mousemove={handleMousemove} on:mouseout={handleMouseout} />
+<div class="container">
+  <canvas
+    bind:this={canvas}
+    width={size}
+    height={size}
+    on:mousemove={handleMousemove}
+    on:mouseout={handleMouseout} />
 
   <svg bind:this={svg} viewBox="0 0 {size} {size}">
     <text>{projection[hoveredPointIndex]}</text>
     {#if projection[hoveredPointIndex] && projection[hoveredPointIndex][0]}
       <circle
-        r='10' fill='none' stroke='#000' stroke-width='3' 
-        opacity='{hoveredPointIndex > -1 ? 1 : 0}'
+        r="10"
+        fill="none"
+        stroke="#000"
+        stroke-width="3"
+        opacity={hoveredPointIndex > -1 ? 1 : 0}
         cx={projection[hoveredPointIndex][0]}
-        cy={projection[hoveredPointIndex][1]}>
-      </circle>
+        cy={projection[hoveredPointIndex][1]} />
     {/if}
   </svg>
 </div>
-
-
-
-

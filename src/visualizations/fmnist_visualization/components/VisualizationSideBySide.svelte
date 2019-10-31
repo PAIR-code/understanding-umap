@@ -38,6 +38,12 @@
   const onPointClick = i => {
     const labelIndex = i === null ? null : metadata[i].labelIndex;
     onCategoryClick(labelIndex)();
+    stopOrbitAnimations();
+  };
+
+  const stopOrbitAnimations = () => {
+    tsneScatterGL.stopOrbitAnimation();
+    umapScatterGL.stopOrbitAnimation();
   };
 
   window._selectFmnistLabel = (e, label) => {
@@ -146,6 +152,7 @@
 
     const onCameraMove = () => {
       if (isOrbiting) isOrbiting = false;
+      stopOrbitAnimations();
     };
 
     const scatterGLOptions = {
@@ -158,12 +165,12 @@
     umapScatterGL = new ScatterGL(umapContainer, {
       ...scatterGLOptions,
       camera: { zoom: 1.2 },
-      onHover: d => tsneScatterGL.setHoverPointIndex(d),
+      onHover: d => tsneScatterGL.setHoverPointIndex(d)
     });
     tsneScatterGL = new ScatterGL(tsneContainer, {
       ...scatterGLOptions,
       camera: { zoom: 0.9 },
-      onHover: d => umapScatterGL.setHoverPointIndex(d),
+      onHover: d => umapScatterGL.setHoverPointIndex(d)
     });
     setDefaultPointColorer();
 

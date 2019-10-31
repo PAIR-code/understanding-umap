@@ -20,7 +20,6 @@ import json from "rollup-plugin-json";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
 import { mdsvex } from "mdsvex";
-import visualizer from "rollup-plugin-visualizer";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -92,7 +91,6 @@ export default {
 
     // If we're building for production (npm run build
     // instead of npm run dev), minify
-    production && terser(),
-    visualizer()
+    production && terser()
   ]
 };
