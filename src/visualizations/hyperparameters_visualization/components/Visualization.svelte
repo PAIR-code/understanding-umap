@@ -193,7 +193,6 @@
   }
 
   .demo-description {
-    width: 400px;
     padding: 4px;
   }
 
@@ -255,7 +254,7 @@
                 {#each row as points}
                   <Preview
                     {points}
-                    on:hover={e => hoveredPointIndex = e.detail}
+                    on:hover={e => (hoveredPointIndex = e.detail)}
                     {hoveredPointIndex}
                     onClick={() => {}}
                     highlighted={true}
