@@ -221,6 +221,13 @@
     left: 0;
     cursor: pointer;
   }
+
+  @media only screen and (max-width: 800px) {
+    .refresh {
+      top: 0;
+    }
+  }
+
   .refresh:hover {
     color: #333;
   }

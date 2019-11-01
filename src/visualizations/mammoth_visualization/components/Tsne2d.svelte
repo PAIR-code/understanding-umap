@@ -13,13 +13,25 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   ==============================================================================*/
-  
+
   import { afterUpdate, onMount } from "svelte";
   import Slider from "../../../shared/components/Slider.svelte";
   import { TSNE_MAMMOTH_PERPLEXITIES } from "../../../shared/js/parameters";
   import Projection2d from "./Projection2d.svelte";
 
-  const sliderWidth = 230;
+  let sliderWidth = 230;
+  function matchResponsive(x) {
+    if (x.matches) {
+      sliderWidth = 100;
+    } else {
+      sliderWidth = 230;
+    }
+  }
+
+  const mediaQuery = window.matchMedia("(max-width: 800px)");
+  matchResponsive(mediaQuery);
+  mediaQuery.addListener(matchResponsive);
+
   // prettier-ignore
   const perplexities = [...TSNE_MAMMOTH_PERPLEXITIES];
 
@@ -52,6 +64,13 @@
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .container {
+      width: 100%;
+      margin-bottom: 10px;
+    }
   }
 
   .controls {

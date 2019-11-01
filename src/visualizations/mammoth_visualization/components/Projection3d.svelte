@@ -95,6 +95,17 @@
     min-height: 500px;
   }
 
+  @media only screen and (max-width: 800px) {
+    .container {
+      width: 100%;
+      margin-bottom: 0;
+    }
+
+    .scatter-gl-container {
+      min-height: 300px;
+    }
+  }
+
   .title {
     text-align: center;
     width: 100%;

@@ -186,9 +186,16 @@
     min-height: 500px;
   }
 
+  @media only screen and (max-width: 800px) {
+    .container {
+      min-height: 400px;
+    }
+  }
+
   .scatter-gl-container {
     height: 100%;
     position: absolute;
+    width: 50%;
     top: 0;
   }
 
@@ -208,12 +215,13 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    flex-wrap: wrap;
     bottom: 0;
   }
 
   .category {
     cursor: pointer;
-    margin: 0 2px;
+    margin: 2px;
     padding: 8px;
     user-select: none;
     color: #333;
@@ -257,6 +265,12 @@
   }
   .orbit:hover {
     color: #333;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .orbit {
+      top: 0;
+    }
   }
 </style>
 

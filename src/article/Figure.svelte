@@ -16,9 +16,21 @@
 </script>
 
 <style>
+  @media only screen and (max-width: 800px) {
+    figure {
+      width: 100%;
+      margin-left: 0%;
+    }
+  }
+
+  @media only screen and (min-width: 800px) {
+    figure {
+      width: 110%;
+      margin-left: -5%;
+    }
+  }
+
   figure {
-    width: 110%;
-    margin-left: -5%;
     display: flex;
     flex-direction: column;
     justify-content: center;

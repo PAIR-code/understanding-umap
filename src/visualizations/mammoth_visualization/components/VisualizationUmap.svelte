@@ -40,20 +40,26 @@
     flex-direction: row;
     width: 100%;
   }
+
+  @media only screen and (max-width: 800px) {
+    .container {
+      flex-direction: column;
+    }
+  }
 </style>
 
 <div class="container">
   {#if isLoaded}
-    <Projection3d 
-      {colorIndices}  
+    <Projection3d
+      {colorIndices}
       {mammoth3d}
-      on:hover={e => hoveredPointIndex = e.detail}
+      on:hover={e => (hoveredPointIndex = e.detail)}
       {hoveredPointIndex}
       title={'Original 3D Data'} />
-    <Umap2d 
-      {colorIndices} 
-      {projections} 
-      on:hover={e => hoveredPointIndex = e.detail}
+    <Umap2d
+      {colorIndices}
+      {projections}
+      on:hover={e => (hoveredPointIndex = e.detail)}
       {hoveredPointIndex}
       title={'2D UMAP Projection'} />
   {:else}

@@ -143,7 +143,7 @@
   }
 
   .data-details .data-controls {
-    width: 40%;
+    width: 50%;
     float: right;
     position: relative;
     overflow: hidden;

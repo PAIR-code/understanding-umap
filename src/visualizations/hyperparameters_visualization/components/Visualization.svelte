@@ -37,6 +37,20 @@
   const nNeighborsOptions = [5, 15, 30, 50, 100];
   const minDistOptions = [0, 0.01, 0.05, 0.1, 0.5, 1.0];
 
+  let N_PER_ROW = 6;
+
+  function matchResponsive(x) {
+    if (x.matches) {
+      N_PER_ROW = 8;
+    } else {
+      N_PER_ROW = 6;
+    }
+  }
+
+  const mediaQuery = window.matchMedia("(max-width: 800px)");
+  matchResponsive(mediaQuery);
+  mediaQuery.addListener(matchResponsive);
+
   const projections = [];
 
   let canvas;
@@ -222,6 +236,24 @@
     align-items: center;
     justify-content: space-between;
   }
+
+  @media only screen and (max-width: 800px) {
+    .figures-container {
+      width: 90%;
+    }
+
+    .container {
+      flex-direction: column;
+    }
+
+    .menu {
+      width: 100%;
+    }
+
+    .demo-select {
+      margin-top: 20px;
+    }
+  }
 </style>
 
 <div class="container">
@@ -269,13 +301,13 @@
     </div>
     <div class="menu">
       <div class="demo-select">
-        {#each groupDemos(6) as group, groupIndex}
+        {#each groupDemos(N_PER_ROW) as group, groupIndex}
           <div class="demos">
             {#each group as demo, i}
               <Preview
                 points={demo.previewOverride ? getDemoPreviewOverride(demo) : getPoints(demo)}
-                onClick={handlePreviewClick(groupIndex * 6 + i)}
-                selected={groupIndex * 6 + i === selectedDemoIndex} />
+                onClick={handlePreviewClick(groupIndex * N_PER_ROW + i)}
+                selected={groupIndex * N_PER_ROW + i === selectedDemoIndex} />
             {/each}
           </div>
         {/each}

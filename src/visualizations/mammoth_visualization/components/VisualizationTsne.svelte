@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   ==============================================================================*/
-  
+
   import { onMount } from "svelte";
   import { loadData, loadTSNE } from "../js/load-data";
   import Tsne2d from "./Tsne2d.svelte";
@@ -27,7 +27,6 @@
   let tsneProjections;
   let mammoth3d;
   let hoveredPointIndex = -1;
-
 
   onMount(async () => {
     const data = await loadData();
@@ -45,20 +44,26 @@
     flex-direction: row;
     width: 100%;
   }
+
+  @media only screen and (max-width: 800px) {
+    .container {
+      flex-direction: column;
+    }
+  }
 </style>
 
 <div class="container">
   {#if isLoaded}
     <Tsne2d
       {colorIndices}
-      on:hover={e => hoveredPointIndex = e.detail}
+      on:hover={e => (hoveredPointIndex = e.detail)}
       {hoveredPointIndex}
       projections={tsneProjections}
       title={'2D t-SNE projection'}
       times={times.tsne} />
     <Umap2d
       {colorIndices}
-      on:hover={e => hoveredPointIndex = e.detail}
+      on:hover={e => (hoveredPointIndex = e.detail)}
       {hoveredPointIndex}
       projections={umapProjections}
       title={'2D UMAP projection'}

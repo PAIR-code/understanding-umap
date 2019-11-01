@@ -197,7 +197,6 @@
   }
 
   .demo-description {
-    width: 700px;
     padding: 4px;
     display: flex;
     flex-direction: column;
@@ -209,6 +208,19 @@
 
   .demo-parameter-name {
     font-weight: 600;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .figures-container {
+      width: 100%;
+    }
+
+    .menu {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      padding-left: 0;
+    }
   }
 </style>
 
