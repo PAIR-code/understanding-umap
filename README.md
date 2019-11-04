@@ -12,8 +12,7 @@ yarn dev
 #### Publishing to github pages
 
 ```bash
-URL_PREFIX=https://pair-code.github.io/understanding-umap yarn build
-node deploy.js
+yarn pub
 ```
 
 #### To develop figures individually

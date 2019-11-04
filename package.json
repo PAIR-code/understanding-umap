@@ -55,6 +55,7 @@
     "preprocess:hyperparameters": "node -r esm src/visualizations/hyperparameters_visualization/js/preprocess.js",
     "preprocess:mammoth": "node -r esm scripts/compress_mammoth.js",
     "start": "sirv public --single",
-    "start:dev": "sirv public --single --dev"
+    "start:dev": "sirv public --single --dev",
+    "pub": "URL_PREFIX=https://pair-code.github.io/understanding-umap yarn build && node scripts/deploy.js"
   }
 }
