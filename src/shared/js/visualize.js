@@ -20,14 +20,6 @@ export function getPoints(demo, params) {
   }
 
   return demo.generator.apply(null, params);
-
-  if (pointsCache.has(demo.name)) {
-    return pointsCache.get(demo.name);
-  } else {
-    const points = demo.generator.apply(null, params);
-    pointsCache.set(demo.name, points);
-    return points;
-  }
 }
 
 const overrideCache = new Map();
@@ -38,17 +30,6 @@ export function getDemoPreviewOverride(demo, params) {
 
   if (demo.previewOverride) {
     return demo.previewOverride.apply(null, params);
-  }
-  return null;
-
-  if (demo.previewOverride) {
-    if (overrideCache.has(demo.name)) {
-      return overrideCache.get(demo.name);
-    } else {
-      const points = demo.previewOverride.apply(null, params);
-      overrideCache.set(demo.name, points);
-      return points;
-    }
   }
   return null;
 }
@@ -111,9 +92,9 @@ export function visualize(points, canvas, message, no3d) {
     var r = is3d ? zScale(p.coords[2]) : 4;
     circle(g, x, y, r);
 
-    if (!is3d){ 
-      p.px = x
-      p.py = y
+    if (!is3d) {
+      p.px = x;
+      p.py = y;
     }
   }
 
