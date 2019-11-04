@@ -21,6 +21,7 @@ import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
 import staticSite from "rollup-plugin-static-site";
 import replace from "@rollup/plugin-replace";
+import postcss from "rollup-plugin-postcss";
 import { mdsvex } from "mdsvex";
 
 const production = !process.env.ROLLUP_WATCH;
@@ -93,6 +94,9 @@ export default {
       preprocess: mdsvex({
         extension: ".svx"
       })
+    }),
+    postcss({
+      extract: "public/global.css"
     }),
     replace({ __URL_PREFIX__: urlPrefix }),
     staticSite({

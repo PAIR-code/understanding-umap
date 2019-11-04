@@ -16,6 +16,7 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-static-site": "^0.1.0",
     "rollup-plugin-svelte": "^5.0.3",
     "rollup-plugin-terser": "^4.0.4",

@@ -14,6 +14,7 @@
   ==============================================================================*/
 
 import Supplement from "./article/Supplement.svx";
+import "./global.css";
 
 export default new Supplement({
   target: document.body
