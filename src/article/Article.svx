@@ -173,6 +173,12 @@ UMAP is an incredibly powerful tool in the data scientist's arsenal, and offers 
 
 ### Acknowledgements
 
+<section class="acknowledgements">
+
 We'd like to thank [Max Noichl](https://homepage.univie.ac.at/noichlm94/) for the delightful mammoth visualization idea, and the [Smithshonian Institute](https://3d.si.edu/) for the 3D mammoth model. We'd also like to thank [Leland McInnes](https://twitter.com/leland_mcinnes?lang=en) for his excellent feedback, and of course the UMAP library itself.
+
+Source code available on [github](https://github.com/PAIR-code/understanding-umap). Interactive UMAP projections powered by [umap-js](https://github.com/PAIR-code/umap-js). 3D Scatter plots powered by [scatter-gl](https://github.com/PAIR-code/scatter-gl).
+
+</section>
 
 </footer>
