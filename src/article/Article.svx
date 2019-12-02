@@ -103,7 +103,7 @@ The following visualization - extended from excellent work by [Max Noichl](https
   <MammothUmapVisualization />
   <span slot="caption">
     <span class="figure-number">Figure 5: </span>
-    UMAP projections of a 3D woolly mammoth skeleton (50,000 points) into 2 dimensions, with various settings for the <code>n_neighbors</code> and <code>min_dist</code> parameters.
+    UMAP projections of a 3D woolly mammoth skeleton (10,000 points) into 2 dimensions, with various settings for the <code>n_neighbors</code> and <code>min_dist</code> parameters.
   </span>
 </Figure>
 
@@ -117,7 +117,7 @@ The biggest difference between the the output of UMAP when compared with t-SNE i
   <MammothTsneVisualization />
   <span slot="caption">
     <span class="figure-number">Figure 6: </span>
-    A comparison between UMAP and t-SNE projections of a 3D woolly mammoth skeleton (50,000 points) into 2 dimensions, with various settings for parameters. Notice how much more global structure is preserved with UMAP, particularly with larger values of <code>n_neighbors</code>.
+    A comparison between UMAP and t-SNE projections of a 3D woolly mammoth skeleton (10,000 points) into 2 dimensions, with various settings for parameters. Notice how much more global structure is preserved with UMAP, particularly with larger values of <code>n_neighbors</code>.
   </span>
 </Figure>
 
