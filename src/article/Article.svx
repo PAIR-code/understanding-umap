@@ -103,7 +103,7 @@ The following visualization - extended from excellent work by [Max Noichl](https
   <MammothUmapVisualization />
   <span slot="caption">
     <span class="figure-number">Figure 5: </span>
-    UMAP projections of a 3D woolly mammoth skeleton (50,000 points) into 2 dimensions, with various settings for the <code>n_neighbors</code> and <code>min_dist</code> parameters.
+    UMAP projections of a 3D woolly mammoth skeleton (50k points, 10k shown) into 2 dimensions, with various settings for the <code>n_neighbors</code> and <code>min_dist</code> parameters.
   </span>
 </Figure>
 

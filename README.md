@@ -29,7 +29,9 @@ yarn dev:toy_comparison
 
 #### Data preprocessing
 
-_Understanding UMAP_ uses a few tricks to make the data payloads for some of the interactive figures small enough to download in a reasonable time. The `mammoth` figures use a 10-bit encoding scheme to compress the 10,000 3D points into a significantly smaller payload. The `hyperparameters` and `toy_comparison` figures precompute UMAP embeddings for all of their different combinations, then use the same 10-bit encoding scheme to compress the data.
+For the mammoth figures, the [raw 3D data](https://github.com/MNoichl/UMAP-examples-mammoth-/blob/master/mammoth_a.csv) was downsampled to 50,000 points before being projected with UMAP / t-SNE. These 50,000 points were then randomly subsampled to 10,000 points in order to minimize the payload size.
+
+_Understanding UMAP_ uses a few tricks to make the data payloads for some of the interactive figures small enough to download in a reasonable time. The `mammoth` figures use a 10-bit encoding scheme to compress the 10,000 data points into a significantly smaller payload. The `hyperparameters` and `toy_comparison` figures precompute UMAP embeddings for all of their different combinations, then use the same 10-bit encoding scheme to compress the data.
 
 ```bash
 yarn preprocess:hyperparameters
