@@ -2,7 +2,7 @@
   "name": "umap_article",
   "version": "0.0.1",
   "devDependencies": {
-    "@babel/core": "^7.6.0",
+    "@babel/core": "^7.29.6",
     "@babel/node": "^7.6.1",
     "@rollup/plugin-replace": "^2.2.0",
     "atob": "^2.1.2",
